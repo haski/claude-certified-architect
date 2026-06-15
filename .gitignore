@@ -1,2 +1,7 @@
 .DS_Store
 .claude/*
+# build artifact (generated shareable bundle)
+claude-architect-tutorial.zip
+# Anthropic confidential exam guide — do NOT commit/publish
+Claude Certified Architect – Foundations Certification Exam Guide.pdf
+*.NTK.pdf
