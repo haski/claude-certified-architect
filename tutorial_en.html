@@ -1,0 +1,1977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Architect's Field Guide — Claude Certified Architect</title>
+<meta name="description" content="An interactive, visual tutorial that prepares you for the Claude Certified Architect — Foundations certification.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tutorial-assets/style.css">
+</head>
+<body>
+<div class="scrim" id="scrim"></div>
+<div class="shell">
+
+  <!-- ============================ SIDEBAR ============================ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark">
+        <div class="brand-glyph">\|/
+-✳-
+/|\</div>
+        <div>
+          <div class="brand-name">claude-code<br><span>field guide</span></div>
+        </div>
+      </div>
+      <div class="brand-sub">architect · foundations</div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Course progress</span><b id="progPct">0%</b></div>
+      <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
+    </div>
+
+    <nav class="nav" id="nav">
+      <div class="nav-section">Start here</div>
+      <a class="nav-link" data-page="home"><span class="nav-num">◆</span><span class="nav-label">Overview &amp; the Exam</span><span class="nav-check">✓</span></a>
+      <a class="nav-link" data-page="blueprint"><span class="nav-num">▤</span><span class="nav-label">Exam Blueprint</span><span class="nav-check">✓</span></a>
+
+      <div class="nav-section">Part I · Foundations</div>
+      <a class="nav-link" data-page="ch1"><span class="nav-num">01</span><span class="nav-label">Claude API Fundamentals</span><span class="nav-check">✓</span></a>
+      <a class="nav-link" data-page="ch2"><span class="nav-num">02</span><span class="nav-label">Tools &amp; tool_use</span><span class="nav-check">✓</span></a>
+      <a class="nav-link" data-page="ch3"><span class="nav-num">03</span><span class="nav-label">The Agent SDK</span><span class="nav-check">✓</span></a>
+      <a class="nav-link" data-page="ch4"><span class="nav-num">04</span><span class="nav-label">Model Context Protocol</span><span class="nav-check">✓</span></a>
+      <a class="nav-link" data-page="ch5"><span class="nav-num">05</span><span class="nav-label">Claude Code Configuration</span><span class="nav-check">✓</span></a>
+      <a class="nav-link" data-page="ch6"><span class="nav-num">06</span><span class="nav-label">Prompt Engineering</span><span class="nav-check">✓</span></a>
+      <a class="nav-link" data-page="ch7"><span class="nav-num">07</span><span class="nav-label">Message Batches API</span><span class="nav-check">✓</span></a>
+      <a class="nav-link" data-page="ch8"><span class="nav-num">08</span><span class="nav-label">Task Decomposition</span><span class="nav-check">✓</span></a>
+      <a class="nav-link" data-page="ch9"><span class="nav-num">09</span><span class="nav-label">Escalation &amp; Human-in-Loop</span><span class="nav-check">✓</span></a>
+      <a class="nav-link" data-page="ch10"><span class="nav-num">10</span><span class="nav-label">Error Handling</span><span class="nav-check">✓</span></a>
+      <a class="nav-link" data-page="ch11"><span class="nav-num">11</span><span class="nav-label">Context Management</span><span class="nav-check">✓</span></a>
+      <a class="nav-link" data-page="ch12"><span class="nav-num">12</span><span class="nav-label">Preserving Provenance</span><span class="nav-check">✓</span></a>
+      <a class="nav-link" data-page="ch13"><span class="nav-num">13</span><span class="nav-label">Built-in Tools</span><span class="nav-check">✓</span></a>
+
+      <div class="nav-section">Part II · Certify</div>
+      <a class="nav-link exam" data-page="exam"><span class="nav-num">▶</span><span class="nav-label">Exam Simulator</span><span class="nav-check">✓</span></a>
+    </nav>
+  </aside>
+
+  <!-- ============================ MAIN ============================ -->
+  <div class="main">
+    <header class="topbar">
+      <button class="btn menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+      <div class="crumb" id="crumb">Overview</div>
+      <div class="topbar-actions">
+        <button class="btn" id="prevBtn">← Prev</button>
+        <button class="btn btn-primary" id="nextBtn">Next →</button>
+      </div>
+    </header>
+
+    <main class="content" id="content">
+
+      <!-- ==================== HOME / COVER ==================== -->
+      <section class="page active" id="page-home">
+        <div class="wrap-wide cover">
+          <div class="term">
+            <div class="term-bar">
+              <span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span>
+              <span class="term-title">claude-code — architect@foundations: ~/study</span>
+            </div>
+            <div class="term-body">
+<div class="ascii">          \      |      /
+       '.  \    |    /  .'
+   ----  --     ✳     --  ----
+       .'  /    |    \  '.
+          /      |      \</div>
+              <div class="term-line"><span class="p">architect@foundations</span>:<span class="c">~/study</span>$ claude --plan "pass the Foundations exam"</div>
+              <div class="term-line"><span class="o">✳</span> Booting <strong>The Architect's Field Guide</strong> — 13 chapters · 88 questions · solarized-light<span class="cur"></span></div>
+            </div>
+          </div>
+          <div class="eyebrow">Foundations Certification · Study Companion</div>
+          <h1>Design systems that<br>think. Become a<br><em>Claude Architect.</em></h1>
+          <p class="lede">An interactive field guide to the four core technologies the exam tests — the Claude API, the Agent SDK, Claude Code, and the Model Context Protocol — taught through diagrams, real code, and questions you answer as you go.</p>
+          <div class="cover-cta">
+            <button class="btn btn-primary" data-goto="ch1">Begin Chapter 1 &nbsp;→</button>
+            <button class="btn btn-blue" data-goto="exam">Jump to Exam Simulator</button>
+          </div>
+
+          <div class="cover-grid">
+            <div class="feat">
+              <div class="feat-ico"><svg viewBox="0 0 24 24" width="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 4.5-9 4.5-9-4.5L12 3zM3 12l9 4.5 9-4.5M3 16.5L12 21l9-4.5"/></svg></div>
+              <h3>13 visual chapters</h3>
+              <p>Every concept from the official guide, rebuilt as blueprints and worked code.</p>
+            </div>
+            <div class="feat">
+              <div class="feat-ico"><svg viewBox="0 0 24 24" width="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+              <h3>Quiz every chapter</h3>
+              <p>Lock in understanding with checks that explain <em>why</em> right after you answer.</p>
+            </div>
+            <div class="feat">
+              <div class="feat-ico"><svg viewBox="0 0 24 24" width="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg></div>
+              <h3>88-question exam bank</h3>
+              <p>All worked examples and practice questions, answerable in-situ with scoring.</p>
+            </div>
+            <div class="feat">
+              <div class="feat-ico"><svg viewBox="0 0 24 24" width="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zM2 12h20M12 2a15 15 0 010 20 15 15 0 010-20z"/></svg></div>
+              <h3>Domain-weighted</h3>
+              <p>Track exactly where the 100–1000 score, and the 720 pass mark, are won.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="wrap">
+          <h2>What this certification proves</h2>
+          <p>The <strong>Claude Certified Architect — Foundations</strong> exam confirms you can make sound trade-off decisions when building real Claude solutions: customer-support agents, multi-agent research pipelines, Claude Code in CI/CD, developer tooling, and structured data extraction. Questions are scenario-based — you are not asked to recite syntax, but to choose the <em>most effective</em> design among four plausible options.</p>
+
+          <div class="callout note">
+            <div class="co-title">How to use this guide</div>
+            <p>Work the chapters in order — each one ends with a short quiz. When the chapters feel solid, open the <strong>Exam Simulator</strong> and sit a timed-style run. The left rail tracks your progress and marks chapters complete once you finish their quiz.</p>
+          </div>
+
+          <h2>The exam at a glance</h2>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Parameter</th><th>Value</th></tr></thead>
+              <tbody>
+                <tr><td>Question type</td><td>Multiple choice — 1 correct of 4</td></tr>
+                <tr><td>Scoring</td><td>100–1000 scale · passing score <strong>720</strong></td></tr>
+                <tr><td>Guessing penalty</td><td><span class="pill good">None</span> — always answer every question</td></tr>
+                <tr><td>Scenarios</td><td>4 of 6 possible, randomly selected</td></tr>
+                <tr><td>Target candidate</td><td>Solution architect · 6+ months hands-on with Claude</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout tip">
+            <div class="co-title">No penalty for guessing</div>
+            <p>Because wrong answers cost nothing extra, never leave a question blank. Eliminate the two weakest options, then pick the choice that fixes the <em>root cause</em> with the least machinery.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== EXAM BLUEPRINT ==================== -->
+      <section class="page" id="page-blueprint">
+        <div class="wrap">
+          <div class="page-head">
+            <div class="eyebrow blue">Orientation</div>
+            <h1 class="title">The Exam <em>Blueprint</em></h1>
+            <p class="lede">Five domains, weighted unevenly. Spend your study time where the points are — Domain 1 alone is more than a quarter of the exam.</p>
+          </div>
+
+          <h2>Five domains, by weight</h2>
+          <div class="domain-weights">
+            <div class="weight-row">
+              <div class="weight-name">Agent architecture &amp; orchestration<b>Domain 1</b></div>
+              <div class="weight-track"><div class="weight-fill" style="background:linear-gradient(90deg,var(--clay-deep),var(--clay-bright));width:0" data-w="100">27%</div></div>
+            </div>
+            <div class="weight-row">
+              <div class="weight-name">Claude Code configuration &amp; workflows<b>Domain 3</b></div>
+              <div class="weight-track"><div class="weight-fill" style="background:linear-gradient(90deg,var(--clay-deep),var(--clay));width:0" data-w="74">20%</div></div>
+            </div>
+            <div class="weight-row">
+              <div class="weight-name">Prompt engineering &amp; structured output<b>Domain 4</b></div>
+              <div class="weight-track"><div class="weight-fill" style="background:linear-gradient(90deg,var(--blue-deep),var(--blue));width:0" data-w="74">20%</div></div>
+            </div>
+            <div class="weight-row">
+              <div class="weight-name">Tool design &amp; MCP integration<b>Domain 2</b></div>
+              <div class="weight-track"><div class="weight-fill" style="background:linear-gradient(90deg,var(--blue-deep),var(--blue));width:0" data-w="67">18%</div></div>
+            </div>
+            <div class="weight-row">
+              <div class="weight-name">Context management &amp; reliability<b>Domain 5</b></div>
+              <div class="weight-track"><div class="weight-fill" style="background:linear-gradient(90deg,#5d53a6,var(--violet));width:0" data-w="56">15%</div></div>
+            </div>
+          </div>
+
+          <h2>How chapters map to domains</h2>
+          <p>This guide is organised by <em>technology</em> so each idea builds on the last. Here is how the chapters feed each exam domain:</p>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Domain</th><th>Weight</th><th>Chapters that cover it</th></tr></thead>
+              <tbody>
+                <tr><td><strong>1 · Agent architecture &amp; orchestration</strong></td><td><span class="pill warn">27%</span></td><td>Ch 3 (Agent SDK), Ch 8 (Decomposition), Ch 10 (Errors)</td></tr>
+                <tr><td><strong>2 · Tool design &amp; MCP integration</strong></td><td><span class="pill">18%</span></td><td>Ch 2 (tool_use), Ch 4 (MCP), Ch 13 (Built-ins)</td></tr>
+                <tr><td><strong>3 · Claude Code config &amp; workflows</strong></td><td><span class="pill">20%</span></td><td>Ch 5 (Claude Code), Ch 6 (iterative refinement)</td></tr>
+                <tr><td><strong>4 · Prompt engineering &amp; structured output</strong></td><td><span class="pill">20%</span></td><td>Ch 1 (API), Ch 2 (schemas), Ch 6 (Prompting), Ch 7 (Batches)</td></tr>
+                <tr><td><strong>5 · Context management &amp; reliability</strong></td><td><span class="pill">15%</span></td><td>Ch 9 (Escalation), Ch 11 (Context), Ch 12 (Provenance)</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2>The six scenarios</h2>
+          <p>Per the official exam guide, every question lives inside one of <strong>six</strong> realistic scenarios; your exam presents <strong>four, picked at random</strong>. Recognising the scenario tells you which mental model to reach for.</p>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>#</th><th>Scenario</th><th>Core tension</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>Customer Support Resolution Agent</td><td>First-contact resolution vs. correct escalation</td></tr>
+                <tr><td>2</td><td>Code Generation with Claude Code</td><td>Slash commands, CLAUDE.md, planning vs. direct</td></tr>
+                <tr><td>3</td><td>Multi-Agent Research System</td><td>Coordinator decomposition, citations, error propagation</td></tr>
+                <tr><td>4</td><td>Developer Productivity with Claude</td><td>Built-in tools &amp; MCP for codebase exploration</td></tr>
+                <tr><td>5</td><td>Claude Code for Continuous Integration</td><td>Headless mode, structured output, false positives</td></tr>
+                <tr><td>6</td><td>Structured Data Extraction</td><td>JSON schemas, validation, edge cases</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout note">
+            <div class="co-title">A note on the Exam Simulator's question pool</div>
+            <p>The official guide defines the <strong>six</strong> scenarios above. The Simulator also includes a set of community-reported <em>“Conversational AI Patterns”</em> practice questions (context windows, instruction drift, memory). That isn't a separate official scenario — those skills are tested under <strong>Domain 5 (Context Management)</strong> and <strong>Domain 4 (Prompt Engineering)</strong> — but the questions are good extra practice, so they're kept and labelled as their own group.</p>
+          </div>
+
+          <div class="callout exam">
+            <div class="co-title">Recurring exam meta-patterns</div>
+            <p>Across all scenarios, a handful of principles decide most questions: <strong>deterministic enforcement beats prompting</strong> for critical rules · <strong>tool descriptions are the primary routing mechanism</strong> · <strong>least privilege</strong> for tools and context · <strong>fix the root cause</strong>, not the symptom · and <strong>structured errors</strong> over generic failures. Hold these five in mind and you can reason through unfamiliar questions.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== CHAPTER 1 ==================== -->
+      <section class="page" id="page-ch1">
+        <div class="wrap">
+          <div class="page-head">
+            <div class="eyebrow">Chapter 01 · Claude API</div>
+            <h1 class="title">Fundamentals of <em>Model Interaction</em></h1>
+            <p class="lede">Everything an agent does sits on top of one request–response call. Master the shape of that call — and the fact that the model remembers nothing between calls — and the rest of the exam falls into place.</p>
+          </div>
+
+          <p class="chapter-lede">The Claude API is <strong>stateless</strong>. Each request is independent; the model has no server-side memory of prior turns. To hold a conversation, <em>you</em> resend the full history every time.</p>
+
+          <h2><span class="h2-num">1.1</span>The shape of a request</h2>
+          <p>Every call to the Messages API is a JSON object. These fields recur throughout the exam:</p>
+          <div class="code">
+            <div class="code-head"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span><span class="code-file">messages.request.json</span><span class="code-lang">json</span></div>
+            <pre data-lang="json"><code>{
+  "model": "claude-sonnet-4-6",
+  "max_tokens": 1024,
+  "system": "You are a helpful assistant.",
+  "messages": [
+    {"role": "user", "content": "Hi!"},
+    {"role": "assistant", "content": "Hello!"},
+    {"role": "user", "content": "How are you?"}
+  ],
+  "tools": [],
+  "tool_choice": {"type": "auto"}
+}</code></pre>
+          </div>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Field</th><th>Role</th></tr></thead>
+              <tbody>
+                <tr><td><code>model</code></td><td>Which model — e.g. <code>claude-opus-4-6</code>, <code>claude-sonnet-4-6</code>, <code>claude-haiku-4-5</code></td></tr>
+                <tr><td><code>max_tokens</code></td><td>Maximum tokens in the response (not the context limit)</td></tr>
+                <tr><td><code>system</code></td><td>The system prompt — behaviour, role, constraints. Passed <em>separately</em>, not inside <code>messages</code></td></tr>
+                <tr><td><code>messages</code></td><td>The full conversation history — you must resend it every call</td></tr>
+                <tr><td><code>tools</code></td><td>Definitions of callable tools</td></tr>
+                <tr><td><code>tool_choice</code></td><td>Tool-selection strategy (Chapter 2)</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2><span class="h2-num">1.2</span>Statelessness, visualised</h2>
+          <p>Because nothing persists, a "conversation" is really a growing transcript you carry forward. This single fact explains a cluster of exam answers about lost memory and rising cost.</p>
+          <div class="figure">
+            <svg viewBox="0 0 760 230" role="img" aria-label="Stateless API: each call resends the whole history">
+              <!-- call 1 -->
+              <rect class="dg-node" x="20" y="70" width="150" height="90" rx="10"/>
+              <text class="dg-label" x="95" y="100" text-anchor="middle">Call 1</text>
+              <text class="dg-sub" x="95" y="122" text-anchor="middle">[u]</text>
+              <text class="dg-sub" x="95" y="140" text-anchor="middle">1 message</text>
+              <!-- call 2 -->
+              <rect class="dg-node" x="220" y="55" width="160" height="120" rx="10"/>
+              <text class="dg-label" x="300" y="85" text-anchor="middle">Call 2</text>
+              <text class="dg-sub" x="300" y="107" text-anchor="middle">[u][a][u]</text>
+              <text class="dg-sub" x="300" y="125" text-anchor="middle">3 messages</text>
+              <!-- call 3 -->
+              <rect class="dg-node-clay" x="430" y="35" width="180" height="160" rx="10"/>
+              <text class="dg-label" x="520" y="65" text-anchor="middle">Call 3</text>
+              <text class="dg-sub" x="520" y="87" text-anchor="middle">[u][a][u][a][u]</text>
+              <text class="dg-sub" x="520" y="105" text-anchor="middle">5 messages</text>
+              <text class="dg-sub" x="520" y="135" text-anchor="middle" fill="#cb4b16">↑ tokens ↑ cost</text>
+              <text class="dg-sub" x="520" y="153" text-anchor="middle" fill="#cb4b16">↑ latency</text>
+              <!-- arrows -->
+              <line class="dg-edge-clay" x1="170" y1="115" x2="216" y2="115" marker-end="url(#ar1)"/>
+              <line class="dg-edge-clay" x1="380" y1="115" x2="426" y2="115" marker-end="url(#ar1)"/>
+              <text class="dg-sub" x="660" y="115" fill="#93a1a1">resend</text>
+              <text class="dg-sub" x="660" y="131" fill="#93a1a1">history</text>
+              <defs><marker id="ar1" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path class="dg-arrow-clay" d="M0,0 L9,4.5 L0,9 z"/></marker></defs>
+            </svg>
+            <div class="figcap">Each request carries the <b>entire</b> history — so long conversations cost more and run slower (Ch 11).</div>
+          </div>
+
+          <h2><span class="h2-num">1.3</span>Message roles &amp; <code>stop_reason</code></h2>
+          <p>The <code>messages</code> array uses three roles: <code>user</code>, <code>assistant</code> (the model's prior replies, included when you resend), and tool results (which appear as a <code>tool_result</code> content block, not an explicit role). Every response carries a <code>stop_reason</code> that drives your control flow:</p>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>stop_reason</th><th>Meaning</th><th>What you do</th></tr></thead>
+              <tbody>
+                <tr><td><code>end_turn</code></td><td>The model finished</td><td>Show the result — the loop ends</td></tr>
+                <tr><td><code>tool_use</code></td><td>The model wants a tool</td><td>Run it, append the result, call again</td></tr>
+                <tr><td><code>max_tokens</code></td><td>Hit the token cap</td><td>Response is truncated; raise the limit</td></tr>
+                <tr><td><code>stop_sequence</code></td><td>A stop string appeared</td><td>Handle per your app logic</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout exam">
+            <div class="co-title">Exam anchor</div>
+            <p>For agent loops, only two values matter: <code>tool_use</code> (keep looping) and <code>end_turn</code> (stop). The reliable completion signal is <strong>always</strong> <code>stop_reason == "end_turn"</code> — never parsed text, never an iteration counter.</p>
+          </div>
+
+          <h2><span class="h2-num">1.4</span>The system prompt</h2>
+          <p>The system prompt defines context and behavioural rules. It is loaded once, applies throughout, and takes priority over user messages. Use it for role, constraints, and output format.</p>
+          <div class="callout warn">
+            <div class="co-title">Watch for unintended tool associations</div>
+            <p>System-prompt wording can accidentally steer tool selection. An instruction like <em>"always verify the customer"</em> can push the model to over-call <code>get_customer</code> even when it is unnecessary. (This is exactly the trap in practice Q56.)</p>
+          </div>
+
+          <h2><span class="h2-num">1.5</span>The context window</h2>
+          <p>The context window is the total text (in tokens) the model processes at once: system prompt + full history + tool definitions + tool results. Three failure modes recur on the exam:</p>
+          <div class="figure">
+            <svg viewBox="0 0 760 200" role="img" aria-label="Lost in the middle reliability curve">
+              <line x1="60" y1="160" x2="720" y2="160" class="dg-edge"/>
+              <line x1="60" y1="160" x2="60" y2="30" class="dg-edge"/>
+              <text class="dg-sub" x="40" y="40" text-anchor="end">high</text>
+              <text class="dg-sub" x="40" y="160" text-anchor="end">low</text>
+              <text class="dg-sub" x="390" y="185" text-anchor="middle">position in a long input  →</text>
+              <path class="dg-edge-clay" d="M60,45 Q200,55 320,120 T560,120 Q660,70 720,48"/>
+              <circle cx="60" cy="45" r="5" fill="#859900"/><text class="dg-sub" x="70" y="38" fill="#859900">start: reliable</text>
+              <circle cx="390" cy="128" r="5" fill="#dc322f"/><text class="dg-sub" x="390" y="148" text-anchor="middle" fill="#dc322f">middle: missed</text>
+              <circle cx="720" cy="48" r="5" fill="#859900"/><text class="dg-sub" x="710" y="38" text-anchor="end" fill="#859900">end: reliable</text>
+            </svg>
+            <div class="figcap"><b>Lost in the middle</b> — models attend best to the start and end of long inputs. Put key info at the edges (Ch 11).</div>
+          </div>
+          <ol>
+            <li><strong>Lost-in-the-middle:</strong> details buried in the middle of a long input get missed. <em>Fix:</em> place key facts at the start or end.</li>
+            <li><strong>Tool-result accumulation:</strong> a tool returning 40+ fields when 5 matter wastes most of the window. <em>Fix:</em> trim outputs (Ch 11).</li>
+            <li><strong>Progressive summarisation:</strong> numbers, percentages, and dates degrade into vague words ("about", "roughly") when history is compressed. <em>Fix:</em> a persistent facts block (Ch 11).</li>
+          </ol>
+
+          <div class="takeaways">
+            <h3>Key takeaways</h3>
+            <ul>
+              <li>The API is stateless — resend the full <code>messages</code> history on every call.</li>
+              <li>The system prompt is separate from <code>messages</code> and outranks user text.</li>
+              <li><code>stop_reason</code> drives the agent loop: <code>tool_use</code> → continue, <code>end_turn</code> → stop.</li>
+              <li>The context window holds prompt + history + tools + results; mind lost-in-the-middle and summarisation loss.</li>
+            </ul>
+          </div>
+
+          <div class="quiz" data-quiz="ch1">
+            <div class="quiz-head"><span class="quiz-badge">Quiz</span><h3>Check yourself · Chapter 1</h3></div>
+            <div class="quiz-sub">Three questions. Pick an answer to see whether it's right and why.</div>
+
+            <div class="q">
+              <div class="q-text"><span class="qn">Q1</span> A multi-turn assistant "forgets" something the user said two messages ago. The conversation is tiny. What is the most likely cause?</div>
+              <div class="opts">
+                <button class="opt">The context window was exceeded.</button>
+                <button class="opt" data-correct>Your app isn't including prior messages in the <code>messages</code> array.</button>
+                <button class="opt">Claude needs a <code>session_id</code> parameter to track memory.</button>
+                <button class="opt">A vector database connection is required for memory.</button>
+              </div>
+              <div class="q-explain"><b>Correct: B.</b> Claude is stateless — every call must carry the full history in <code>messages</code>. A two-message gap can't overflow context, and there is no <code>session_id</code> or required vector DB in the API.</div>
+            </div>
+
+            <div class="q">
+              <div class="q-text"><span class="qn">Q2</span> In an agent loop, what is the only reliable signal that the task is complete?</div>
+              <div class="opts">
+                <button class="opt">The assistant produced some text content.</button>
+                <button class="opt">A fixed iteration limit (e.g. 10) was reached.</button>
+                <button class="opt" data-correct><code>stop_reason == "end_turn"</code>.</button>
+                <button class="opt">The reply contains a phrase like "task complete".</button>
+              </div>
+              <div class="q-explain"><b>Correct: C.</b> <code>end_turn</code> is the model's explicit structured completion signal. Parsing text or capping iterations are the classic anti-patterns.</div>
+            </div>
+
+            <div class="q">
+              <div class="q-text"><span class="qn">Q3</span> Why do latency and cost rise as a conversation passes 50 turns?</div>
+              <div class="opts">
+                <button class="opt" data-correct>The entire history is resent with each request, growing the token count.</button>
+                <button class="opt">The model builds an internal user profile that needs more processing.</button>
+                <button class="opt">Responses get progressively longer by design.</button>
+                <button class="opt">Database operations slow down as history grows.</button>
+              </div>
+              <div class="q-explain"><b>Correct: A.</b> Statelessness means each request carries the complete transcript; more tokens in → more latency and cost. The model keeps no internal state between calls.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== CHAPTER 2 ==================== -->
+      <section class="page" id="page-ch2">
+        <div class="wrap">
+          <div class="page-head">
+            <div class="eyebrow">Chapter 02 · Tools</div>
+            <h1 class="title">Tools &amp; <em>tool_use</em></h1>
+            <p class="lede">Claude doesn't run code — it <em>requests</em> a structured call and you execute it. The description you write is the single most important factor in whether it picks the right tool.</p>
+          </div>
+
+          <p class="chapter-lede"><code>tool_use</code> lets Claude call external functions. The model emits a structured request; your code runs it and returns a <code>tool_result</code>. This is also the most reliable way to get structured JSON out of Claude.</p>
+
+          <h2><span class="h2-num">2.1</span>Defining a tool</h2>
+          <p>A tool is a name, a description, and a JSON-schema for its inputs:</p>
+          <div class="code">
+            <div class="code-head"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span><span class="code-file">tool.get_customer.json</span><span class="code-lang">json</span></div>
+            <pre data-lang="json"><code>{
+  "name": "get_customer",
+  "description": "Finds a customer by email or ID. Returns the customer profile (name, email, order history, account status). Use BEFORE lookup_order to verify identity. Accepts an email (user@domain.com) or a numeric customer_id.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "email": {"type": "string", "description": "Customer email"},
+      "customer_id": {"type": "integer", "description": "Numeric customer ID"}
+    },
+    "required": []
+  }
+}</code></pre>
+          </div>
+
+          <h2><span class="h2-num">2.2</span>The description is the routing mechanism</h2>
+          <p>An LLM selects tools <strong>by their descriptions</strong>. This is the most-tested idea in Domain 2. Minimal descriptions like "Retrieves customer information" cause misrouting when tools overlap.</p>
+          <div class="compare">
+            <div class="card bad">
+              <h4>✗ Weak</h4>
+              <p><code>analyze_content</code> — "analyzes content and extracts key information"</p>
+              <p><code>analyze_document</code> — "analyzes documents and extracts key information"</p>
+              <p>Near-identical → the model confuses them and misroutes ~45% of requests.</p>
+            </div>
+            <div class="card good">
+              <h4>✓ Strong</h4>
+              <p>Rename + differentiate: <code>extract_web_results</code> — "processes and returns information retrieved from web search and URLs."</p>
+              <p>Now each tool's purpose is unambiguous.</p>
+            </div>
+          </div>
+          <p>A good description states: <strong>what it does and returns · input formats with examples · edge cases and limits · when to use it vs. a similar tool.</strong></p>
+          <div class="callout note">
+            <div class="co-title">Built-in vs. MCP tools</div>
+            <p>Agents may prefer built-in tools (Read, Grep) over MCP tools with similar functions. To win them over, strengthen the MCP description — highlight unique data or context the built-ins can't provide.</p>
+          </div>
+
+          <h2><span class="h2-num">2.3</span>The <code>tool_choice</code> parameter</h2>
+          <div class="figure">
+            <svg viewBox="0 0 760 180" role="img" aria-label="tool_choice modes">
+              <rect class="dg-node" x="30" y="40" width="220" height="100" rx="10"/>
+              <text class="dg-label" x="140" y="70" text-anchor="middle">auto</text>
+              <text class="dg-sub" x="140" y="94" text-anchor="middle">model decides:</text>
+              <text class="dg-sub" x="140" y="112" text-anchor="middle">tool OR text</text>
+              <text class="dg-sub" x="140" y="130" text-anchor="middle" fill="#268bd2">default</text>
+
+              <rect class="dg-node-blue" x="270" y="40" width="220" height="100" rx="10"/>
+              <text class="dg-label" x="380" y="70" text-anchor="middle">any</text>
+              <text class="dg-sub" x="380" y="94" text-anchor="middle">MUST call</text>
+              <text class="dg-sub" x="380" y="112" text-anchor="middle">some tool</text>
+              <text class="dg-sub" x="380" y="130" text-anchor="middle" fill="#268bd2">guarantee structure</text>
+
+              <rect class="dg-node-clay" x="510" y="40" width="220" height="100" rx="10"/>
+              <text class="dg-label" x="620" y="70" text-anchor="middle">{type:"tool", name}</text>
+              <text class="dg-sub" x="620" y="94" text-anchor="middle">MUST call</text>
+              <text class="dg-sub" x="620" y="112" text-anchor="middle">that exact tool</text>
+              <text class="dg-sub" x="620" y="130" text-anchor="middle" fill="#cb4b16">force first step</text>
+            </svg>
+            <div class="figcap">Three strategies — looser to stricter. Pick the loosest that still gives the guarantee you need.</div>
+          </div>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Value</th><th>Behaviour</th><th>When</th></tr></thead>
+              <tbody>
+                <tr><td><code>{"type":"auto"}</code></td><td>Model decides: tool or text</td><td>Default for most cases</td></tr>
+                <tr><td><code>{"type":"any"}</code></td><td>Must call <em>some</em> tool</td><td>Guarantee structured output</td></tr>
+                <tr><td><code>{"type":"tool","name":"x"}</code></td><td>Must call tool <em>x</em></td><td>Force a specific first step / ordering</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2><span class="h2-num">2.4</span>JSON schemas for structured output</h2>
+          <p>Using <code>tool_use</code> with a JSON schema is the <strong>most reliable</strong> way to get structured output. It guarantees valid JSON and the required structure — but <em>not</em> semantic correctness (values can still be wrong).</p>
+          <div class="code">
+            <div class="code-head"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span><span class="code-file">extraction_schema.json</span><span class="code-lang">json</span></div>
+            <pre data-lang="json"><code>{
+  "type": "object",
+  "properties": {
+    "category": {"type": "string", "enum": ["bug", "feature", "docs", "unclear", "other"]},
+    "category_detail": {"type": ["string", "null"], "description": "Details if category = other/unclear"},
+    "severity": {"type": "string", "enum": ["critical", "high", "medium", "low"]},
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+    "optional_field": {"type": ["string", "null"], "description": "Null if not found in source"}
+  },
+  "required": ["category", "severity"]
+}</code></pre>
+          </div>
+          <p><strong>Schema design rules the exam loves:</strong></p>
+          <ul>
+            <li><strong>Required only when always present.</strong> Required fields push the model to <em>fabricate</em> values when data is missing.</li>
+            <li><strong>Nullable for maybe-absent data:</strong> <code>"type": ["string", "null"]</code> lets the model return <code>null</code> instead of hallucinating.</li>
+            <li><strong>Enums with <code>"other"</code></strong> + a detail string prevent losing data outside your categories.</li>
+            <li><strong>Enum <code>"unclear"</code></strong> — an honest "unclear" beats a confidently wrong category.</li>
+          </ul>
+
+          <h2><span class="h2-num">2.5</span>Syntax vs. semantic errors</h2>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Type</th><th>Example</th><th>Mitigation</th></tr></thead>
+              <tbody>
+                <tr><td><span class="pill bad">Syntax</span></td><td>Invalid JSON, wrong field type</td><td><code>tool_use</code> + JSON schema <em>eliminates</em> these</td></tr>
+                <tr><td><span class="pill warn">Semantic</span></td><td>Totals don't add up, value in wrong field, hallucination</td><td>Validation checks, retry-with-feedback, self-correction (Ch 6)</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="takeaways">
+            <h3>Key takeaways</h3>
+            <ul>
+              <li>Tool <strong>descriptions</strong> are the primary selection mechanism — make them rich and distinct.</li>
+              <li>Eliminate overlap by renaming and differentiating, not by adding classifiers.</li>
+              <li><code>tool_choice</code>: <code>auto</code> (default) → <code>any</code> (force a tool) → forced tool (force order).</li>
+              <li>Schemas kill <em>syntax</em> errors; nullable fields + "other"/"unclear" enums prevent fabrication; <em>semantic</em> errors still need validation.</li>
+            </ul>
+          </div>
+
+          <div class="quiz" data-quiz="ch2">
+            <div class="quiz-head"><span class="quiz-badge">Quiz</span><h3>Check yourself · Chapter 2</h3></div>
+            <div class="quiz-sub">Three questions on tool design and structured output.</div>
+
+            <div class="q">
+              <div class="q-text"><span class="qn">Q1</span> An agent keeps calling <code>get_customer</code> for order questions. Both tools have minimal, similar descriptions. What is the most effective <em>first</em> step?</div>
+              <div class="opts">
+                <button class="opt">Add a routing classifier before the agent.</button>
+                <button class="opt" data-correct>Expand each description with input formats, examples, edge cases, and boundaries.</button>
+                <button class="opt">Add few-shot examples to the system prompt.</button>
+                <button class="opt">Merge the two tools into one.</button>
+              </div>
+              <div class="q-explain"><b>Correct: B.</b> Descriptions are the model's primary selection mechanism — the lowest-effort, highest-impact fix. Classifiers are over-engineering; few-shot adds tokens without addressing the root cause; merging loses capability.</div>
+            </div>
+
+            <div class="q">
+              <div class="q-text"><span class="qn">Q2</span> You must guarantee Claude returns structured data via one of several extraction tools — never plain text. Which setting?</div>
+              <div class="opts">
+                <button class="opt"><code>tool_choice: "auto"</code></button>
+                <button class="opt" data-correct><code>tool_choice: "any"</code></button>
+                <button class="opt">Lower the temperature to 0.</button>
+                <button class="opt">Raise <code>max_tokens</code>.</button>
+              </div>
+              <div class="q-explain"><b>Correct: B.</b> <code>"any"</code> forces a tool call (so you always get structured output) while letting the model pick the best-fitting schema. <code>"auto"</code> permits a text reply.</div>
+            </div>
+
+            <div class="q">
+              <div class="q-text"><span class="qn">Q3</span> An extraction schema marks <code>discount_code</code> as required, but many documents don't contain one. What's the risk?</div>
+              <div class="opts">
+                <button class="opt">The JSON will be syntactically invalid.</button>
+                <button class="opt" data-correct>The model fabricates a value to satisfy the required field.</button>
+                <button class="opt">Nothing — required fields are always safe.</button>
+                <button class="opt">The request is rejected by the API.</button>
+              </div>
+              <div class="q-explain"><b>Correct: B.</b> Required fields pressure the model to invent data when it's absent. Make maybe-absent fields nullable (<code>["string","null"]</code>) so it can honestly return <code>null</code>.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== CHAPTER 3 ==================== -->
+      <section class="page" id="page-ch3">
+        <div class="wrap">
+          <div class="page-head">
+            <div class="eyebrow">Chapter 03 · Agent SDK</div>
+            <h1 class="title">Building <em>Agentic Systems</em></h1>
+            <p class="lede">The agent loop, the coordinator–subagent topology, and hooks. This chapter feeds Domain 1 — the single biggest slice of the exam at 27%.</p>
+          </div>
+
+          <h2><span class="h2-num">3.1</span>The agentic loop</h2>
+          <p>An agent doesn't just answer — it acts in a loop, deciding each next step from context and prior results. This is <strong>model-driven</strong>, unlike a hard-coded decision tree.</p>
+          <div class="figure">
+            <svg viewBox="0 0 760 250" role="img" aria-label="The agentic loop">
+              <rect class="dg-node-clay" x="40" y="100" width="150" height="60" rx="10"/>
+              <text class="dg-label" x="115" y="125" text-anchor="middle">Call Claude</text>
+              <text class="dg-sub" x="115" y="144" text-anchor="middle">with tools</text>
+
+              <polygon class="dg-node" points="300,90 380,130 300,170 220,130" />
+              <text class="dg-label" x="300" y="127" text-anchor="middle">stop_</text>
+              <text class="dg-label" x="300" y="143" text-anchor="middle">reason?</text>
+
+              <rect class="dg-node-blue" x="430" y="40" width="170" height="60" rx="10"/>
+              <text class="dg-label" x="515" y="64" text-anchor="middle">tool_use</text>
+              <text class="dg-sub" x="515" y="83" text-anchor="middle">run tool, append result</text>
+
+              <rect class="dg-node-green" x="430" y="160" width="170" height="60" rx="10"/>
+              <text class="dg-label" x="515" y="184" text-anchor="middle">end_turn</text>
+              <text class="dg-sub" x="515" y="203" text-anchor="middle">done → reply</text>
+
+              <line class="dg-edge-clay" x1="190" y1="130" x2="216" y2="130" marker-end="url(#ar3)"/>
+              <line class="dg-edge" x1="350" y1="105" x2="426" y2="72" marker-end="url(#ar3b)"/>
+              <line class="dg-edge" x1="350" y1="155" x2="426" y2="188" marker-end="url(#ar3b)"/>
+              <!-- loop back: routed above the states, never crossing one -->
+              <path class="dg-edge-blue dg-edge-dash" d="M515,40 L515,22 Q515,14 505,14 L125,14 Q115,14 115,24 L115,100" marker-end="url(#ar3c)"/>
+              <text class="dg-sub" x="312" y="31" text-anchor="middle" fill="#268bd2">loop back with the new tool result</text>
+              <defs>
+                <marker id="ar3" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path class="dg-arrow-clay" d="M0,0 L9,4.5 L0,9 z"/></marker>
+                <marker id="ar3b" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path class="dg-arrow" d="M0,0 L9,4.5 L0,9 z"/></marker>
+                <marker id="ar3c" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path class="dg-arrow-blue" d="M0,0 L9,4.5 L0,9 z"/></marker>
+              </defs>
+            </svg>
+            <div class="figcap">Loop while <b>tool_use</b> · stop on <b>end_turn</b>. Tool results are appended to history so the model can choose the next action.</div>
+          </div>
+          <div class="callout warn">
+            <div class="co-title">Anti-patterns to avoid</div>
+            <p>Parsing assistant text for "Task completed" · using an arbitrary <code>max_iterations</code> as the primary stop condition · treating "the model produced text" as completion. The only reliable signal is <code>stop_reason == "end_turn"</code>.</p>
+          </div>
+
+          <h2><span class="h2-num">3.2</span>AgentDefinition</h2>
+          <div class="code">
+            <div class="code-head"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span><span class="code-file">agent.py</span><span class="code-lang">python</span></div>
+            <pre data-lang="python"><code>agent = AgentDefinition(
+    name="customer_support",
+    description="Handles returns and order issues",
+    system_prompt="You are a customer support agent...",
+    allowed_tools=["get_customer", "lookup_order", "process_refund", "escalate_to_human"],
+    # For a coordinator, include the Task tool:
+    # allowed_tools=["Task", "get_customer", ...]
+)</code></pre>
+          </div>
+          <p><code>allowed_tools</code> follows the <strong>principle of least privilege</strong> — give each agent only the tools its role needs. Too many tools (18 instead of 4–5) measurably <em>reduces</em> selection reliability.</p>
+
+          <h2><span class="h2-num">3.3</span>Hub-and-spoke: coordinator &amp; subagents</h2>
+          <div class="figure">
+            <svg viewBox="0 0 760 240" role="img" aria-label="Hub and spoke coordinator topology">
+              <rect class="dg-node-clay" x="300" y="20" width="160" height="56" rx="10"/>
+              <text class="dg-label" x="380" y="44" text-anchor="middle">Coordinator</text>
+              <text class="dg-sub" x="380" y="63" text-anchor="middle">decomposes · routes · aggregates</text>
+
+              <rect class="dg-node-blue" x="60" y="150" width="170" height="60" rx="10"/>
+              <text class="dg-label" x="145" y="174" text-anchor="middle">Subagent: search</text>
+              <text class="dg-sub" x="145" y="193" text-anchor="middle">isolated context</text>
+              <rect class="dg-node-blue" x="295" y="150" width="170" height="60" rx="10"/>
+              <text class="dg-label" x="380" y="174" text-anchor="middle">Subagent: analyse</text>
+              <text class="dg-sub" x="380" y="193" text-anchor="middle">isolated context</text>
+              <rect class="dg-node-blue" x="530" y="150" width="170" height="60" rx="10"/>
+              <text class="dg-label" x="615" y="174" text-anchor="middle">Subagent: synth</text>
+              <text class="dg-sub" x="615" y="193" text-anchor="middle">isolated context</text>
+
+              <line class="dg-edge-clay" x1="350" y1="76" x2="150" y2="148" marker-end="url(#ar4)"/>
+              <line class="dg-edge-clay" x1="380" y1="76" x2="380" y2="148" marker-end="url(#ar4)"/>
+              <line class="dg-edge-clay" x1="410" y1="76" x2="610" y2="148" marker-end="url(#ar4)"/>
+              <defs><marker id="ar4" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path class="dg-arrow-clay" d="M0,0 L9,4.5 L0,9 z"/></marker></defs>
+            </svg>
+            <div class="figcap">All communication flows through the coordinator — the hub owns observability, error handling, and routing.</div>
+          </div>
+          <p>The coordinator decomposes the task, dynamically selects subagents, delegates, aggregates &amp; validates results, handles errors/retries, and reports to the user.</p>
+          <div class="callout exam">
+            <div class="co-title">Critical principle — isolated context</div>
+            <p>Subagents do <strong>not</strong> inherit the coordinator's history. Required context must be <em>explicitly passed</em> in the subagent's prompt. They share no memory across calls, and all communication routes through the coordinator for observability and control.</p>
+          </div>
+
+          <h2><span class="h2-num">3.4</span>Spawning subagents with <code>Task</code></h2>
+          <p>The coordinator's <code>allowed_tools</code> must include <code>"Task"</code>. Context passing is mandatory:</p>
+          <div class="compare">
+            <div class="card bad">
+              <h4>✗ No context</h4>
+              <p><code>Task: "Analyze the document"</code></p>
+              <p>The subagent has nothing to work with.</p>
+            </div>
+            <div class="card good">
+              <h4>✓ Full context</h4>
+              <p><code>Task: "Analyze the following document. Document: [full text] Prior results: [...] Output format: [schema]"</code></p>
+            </div>
+          </div>
+          <p><strong>Parallel spawning:</strong> a coordinator can emit multiple <code>Task</code> calls in one response — the subagents run concurrently. Use this to partition research and avoid duplication.</p>
+
+          <h2><span class="h2-num">3.5</span>Hooks: deterministic interception</h2>
+          <p>Hooks intercept the agent lifecycle. <code>PostToolUse</code> transforms a tool result before the model sees it; a pre-call hook can block policy-violating actions.</p>
+          <div class="code">
+            <div class="code-head"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span><span class="code-file">hooks.py</span><span class="code-lang">python</span></div>
+            <pre data-lang="python"><code>@hook("PostToolUse")
+def normalize_dates(tool_result):
+    # Unix timestamp -> ISO 8601, "Mar 5, 2025" -> "2025-03-05"
+    return normalized_result
+
+@hook("PreToolUse")
+def enforce_refund_limit(tool_call):
+    if tool_call.name == "process_refund" and tool_call.args.amount > 500:
+        return redirect_to_escalation(tool_call)   # deterministic block</code></pre>
+          </div>
+          <div class="figure">
+            <svg viewBox="0 0 760 150" role="img" aria-label="Hooks deterministic vs prompts probabilistic">
+              <rect class="dg-node-green" x="40" y="40" width="320" height="80" rx="10"/>
+              <text class="dg-label" x="200" y="70" text-anchor="middle">Hooks</text>
+              <text class="dg-sub" x="200" y="92" text-anchor="middle">deterministic · 100% · code</text>
+              <text class="dg-sub" x="200" y="108" text-anchor="middle" fill="#859900">use for financial / legal / safety rules</text>
+
+              <rect class="dg-node" x="400" y="40" width="320" height="80" rx="10"/>
+              <text class="dg-label" x="560" y="70" text-anchor="middle">Prompt instructions</text>
+              <text class="dg-sub" x="560" y="92" text-anchor="middle">probabilistic · &gt;90%, not 100%</text>
+              <text class="dg-sub" x="560" y="108" text-anchor="middle" fill="#93a1a1">use for preferences / formatting</text>
+            </svg>
+            <div class="figcap">When failure has financial, legal, or safety consequences — use a <b>hook</b>, not a prompt.</div>
+          </div>
+
+          <div class="takeaways">
+            <h3>Key takeaways</h3>
+            <ul>
+              <li>Loop on <code>tool_use</code>, stop on <code>end_turn</code> — never on text or an iteration cap.</li>
+              <li>Coordinator owns decomposition, routing, aggregation, and error handling; subagents have <strong>isolated context</strong>.</li>
+              <li>Pass all needed context explicitly in the <code>Task</code> prompt; spawn multiple <code>Task</code>s for parallelism.</li>
+              <li>Hooks give <strong>deterministic</strong> guarantees; prompts are only probabilistic. Critical rules → hooks.</li>
+            </ul>
+          </div>
+
+          <div class="quiz" data-quiz="ch3">
+            <div class="quiz-head"><span class="quiz-badge">Quiz</span><h3>Check yourself · Chapter 3</h3></div>
+            <div class="quiz-sub">Three questions on agent orchestration.</div>
+
+            <div class="q">
+              <div class="q-text"><span class="qn">Q1</span> Refunds above $500 must <em>never</em> be auto-approved. What enforces this reliably?</div>
+              <div class="opts">
+                <button class="opt">A strongly-worded system prompt rule.</button>
+                <button class="opt">Few-shot examples of declining large refunds.</button>
+                <button class="opt" data-correct>A <code>PreToolUse</code> hook that blocks <code>process_refund</code> over the threshold.</button>
+                <button class="opt">Lowering the model temperature.</button>
+              </div>
+              <div class="q-explain"><b>Correct: C.</b> Financial rules need deterministic enforcement. Hooks guarantee 100% compliance; prompts are only probabilistic.</div>
+            </div>
+
+            <div class="q">
+              <div class="q-text"><span class="qn">Q2</span> A subagent receives <code>Task: "Analyze the document"</code> and produces nothing useful. Why?</div>
+              <div class="opts">
+                <button class="opt">Subagents can't read documents.</button>
+                <button class="opt" data-correct>Subagents have isolated context — the document must be passed explicitly in the prompt.</button>
+                <button class="opt">The coordinator forgot to set a <code>session_id</code>.</button>
+                <button class="opt">The Task tool only works with web search.</button>
+              </div>
+              <div class="q-explain"><b>Correct: B.</b> Subagents don't inherit the coordinator's history. All required context must be included in the Task prompt.</div>
+            </div>
+
+            <div class="q">
+              <div class="q-text"><span class="qn">Q3</span> A coordinator must spawn subagents. What must its configuration include?</div>
+              <div class="opts">
+                <button class="opt" data-correct><code>"Task"</code> in its <code>allowed_tools</code>.</button>
+                <button class="opt">A <code>parallel: true</code> flag.</button>
+                <button class="opt">Shared memory with each subagent.</button>
+                <button class="opt">A higher <code>max_tokens</code> budget.</button>
+              </div>
+              <div class="q-explain"><b>Correct: A.</b> Subagents are spawned via the <code>Task</code> tool, so the coordinator's <code>allowed_tools</code> must include it.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== CHAPTER 4 ==================== -->
+      <section class="page" id="page-ch4">
+        <div class="wrap">
+          <div class="page-head">
+            <div class="eyebrow">Chapter 04 · MCP</div>
+            <h1 class="title">Model Context <em>Protocol</em></h1>
+            <p class="lede">MCP is the open standard that plugs external systems into Claude. Know its three primitives, how servers are configured, and what a <em>good</em> error looks like.</p>
+          </div>
+
+          <h2><span class="h2-num">4.1</span>Three primitives</h2>
+          <div class="figure">
+            <svg viewBox="0 0 760 150" role="img" aria-label="MCP three primitives">
+              <rect class="dg-node-clay" x="30" y="35" width="220" height="85" rx="10"/>
+              <text class="dg-label" x="140" y="65" text-anchor="middle">Tools</text>
+              <text class="dg-sub" x="140" y="86" text-anchor="middle">functions the agent CALLS</text>
+              <text class="dg-sub" x="140" y="103" text-anchor="middle">actions · CRUD · APIs</text>
+
+              <rect class="dg-node-blue" x="270" y="35" width="220" height="85" rx="10"/>
+              <text class="dg-label" x="380" y="65" text-anchor="middle">Resources</text>
+              <text class="dg-sub" x="380" y="86" text-anchor="middle">data the agent READS</text>
+              <text class="dg-sub" x="380" y="103" text-anchor="middle">docs · schemas · catalogs</text>
+
+              <rect class="dg-node" x="510" y="35" width="220" height="85" rx="10"/>
+              <text class="dg-label" x="620" y="65" text-anchor="middle">Prompts</text>
+              <text class="dg-sub" x="620" y="86" text-anchor="middle">reusable templates</text>
+              <text class="dg-sub" x="620" y="103" text-anchor="middle">for common tasks</text>
+            </svg>
+            <div class="figcap"><b>Tools</b> act · <b>Resources</b> inform · <b>Prompts</b> template. Knowing which is which is a frequent exam discriminator.</div>
+          </div>
+          <p>An <strong>MCP server</strong> is a process implementing the protocol. On connection, all its tools are discovered automatically, and tools from <em>all</em> connected servers are available at once. As always, descriptions determine how they're used.</p>
+
+          <h2><span class="h2-num">4.2</span>Configuring servers: project vs. user</h2>
+          <div class="code">
+            <div class="code-head"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span><span class="code-file">.mcp.json</span><span class="code-lang">json</span></div>
+            <pre data-lang="json"><code>{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": { "GITHUB_TOKEN": "${GITHUB_TOKEN}" }
+    }
+  }
+}</code></pre>
+          </div>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Scope</th><th>File</th><th>Use for</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Project</strong></td><td><code>.mcp.json</code> (repo root, in VCS)</td><td>Team integrations — shared with everyone who clones</td></tr>
+                <tr><td><strong>User</strong></td><td><code>~/.claude.json</code> (home, not in VCS)</td><td>Personal / experimental servers</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout tip">
+            <div class="co-title">Secrets via env vars</div>
+            <p><code>${GITHUB_TOKEN}</code> substitution means the <code>.mcp.json</code> is version-controlled but the token never is. Each developer supplies their own via environment variable — the idiomatic team setup (practice Q44).</p>
+          </div>
+          <p>For standard integrations (Jira, GitHub, Slack), prefer existing <strong>community MCP servers</strong>; build your own only for unique, team-specific workflows.</p>
+
+          <h2><span class="h2-num">4.3</span>The <code>isError</code> flag &amp; structured errors</h2>
+          <p>When an MCP tool fails, it returns <code>isError: true</code>. <em>How</em> it describes the failure decides whether the agent can recover.</p>
+          <div class="compare">
+            <div class="card good">
+              <h4>✓ Structured error</h4>
+              <pre data-lang="json" style="font-size:11.5px;background:none;padding:0;color:#657b83"><code>{
+  "isError": true,
+  "content": {
+    "errorCategory": "transient",
+    "isRetryable": true,
+    "message": "Orders API timeout.",
+    "attempted_query": "order_id=12345",
+    "partial_results": null
+  }
+}</code></pre>
+            </div>
+            <div class="card bad">
+              <h4>✗ Generic error</h4>
+              <pre data-lang="json" style="font-size:11.5px;background:none;padding:0;color:#657b83"><code>{
+  "isError": true,
+  "content": "Operation failed"
+}</code></pre>
+              <p>The agent can't tell whether to retry, re-query, or escalate.</p>
+            </div>
+          </div>
+          <div class="callout exam">
+            <div class="co-title">Exam anchor — error categories</div>
+            <p>Return <code>errorCategory</code> (transient / validation / business / permission), <code>isRetryable</code>, and a human message. Transient = retry; validation = fix input; business = explain &amp; offer alternative; permission = escalate. (Full table in Ch 10.)</p>
+          </div>
+
+          <h2><span class="h2-num">4.4</span>Resources as a "map"</h2>
+          <p>Resources are data an agent reads for context without taking action: content catalogs, database schemas, documentation, issue summaries. Their advantage — the agent gets an immediate <strong>map</strong> of what exists, instead of burning exploratory tool calls to discover it.</p>
+
+          <div class="takeaways">
+            <h3>Key takeaways</h3>
+            <ul>
+              <li>MCP primitives: <strong>Tools</strong> (act), <strong>Resources</strong> (read for context), <strong>Prompts</strong> (templates).</li>
+              <li>Project <code>.mcp.json</code> (team, VCS) vs. user <code>~/.claude.json</code> (personal); secrets via <code>${ENV}</code>.</li>
+              <li>Prefer community servers for standard integrations.</li>
+              <li>Structured errors (<code>errorCategory</code>, <code>isRetryable</code>, message, partials) enable recovery; generic errors don't.</li>
+            </ul>
+          </div>
+
+          <div class="quiz" data-quiz="ch4">
+            <div class="quiz-head"><span class="quiz-badge">Quiz</span><h3>Check yourself · Chapter 4</h3></div>
+            <div class="quiz-sub">Three questions on MCP.</div>
+
+            <div class="q">
+              <div class="q-text"><span class="qn">Q1</span> Six developers each have a personal GitHub token. You want one shared MCP config without committing secrets. Best approach?</div>
+              <div class="opts">
+                <button class="opt">Each developer adds the server in user scope individually.</button>
+                <button class="opt" data-correct>Add it to project <code>.mcp.json</code> with <code>${GITHUB_TOKEN}</code> substitution; document the env var.</button>
+                <button class="opt">Commit a placeholder token and tell everyone to override it.</button>
+                <button class="opt">Build a wrapper server that reads a <code>.env</code> file.</button>
+              </div>
+              <div class="q-explain"><b>Correct: B.</b> Project <code>.mcp.json</code> with env-var substitution is a single VCS source of truth while each developer supplies their own credential — no secrets committed.</div>
+            </div>
+
+            <div class="q">
+              <div class="q-text"><span class="qn">Q2</span> Which is an MCP <em>Resource</em> rather than a Tool?</div>
+              <div class="opts">
+                <button class="opt"><code>process_refund</code></button>
+                <button class="opt" data-correct>A database schema the agent reads to understand structure</button>
+                <button class="opt"><code>escalate_to_human</code></button>
+                <button class="opt"><code>send_email</code></button>
+              </div>
+              <div class="q-explain"><b>Correct: B.</b> Resources are read-only context (schemas, docs, catalogs). The others perform actions, so they're Tools.</div>
+            </div>
+
+            <div class="q">
+              <div class="q-text"><span class="qn">Q3</span> A subagent gets <code>{"isError": true, "content": "Operation failed"}</code>. What's the design flaw?</div>
+              <div class="opts">
+                <button class="opt">It should have thrown an exception instead.</button>
+                <button class="opt" data-correct>The generic message gives no basis to retry, re-query, or escalate.</button>
+                <button class="opt">Errors should never set <code>isError</code>.</button>
+                <button class="opt">It's missing a <code>session_id</code>.</button>
+              </div>
+              <div class="q-explain"><b>Correct: B.</b> Without an error category, retryable flag, and context, the agent can't choose a recovery path. Structured errors fix this.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== CHAPTER 5 ==================== -->
+      <section class="page" id="page-ch5">
+        <div class="wrap">
+          <div class="page-head">
+            <div class="eyebrow">Chapter 05 · Claude Code</div>
+            <h1 class="title">Configuration &amp; <em>Workflows</em></h1>
+            <p class="lede">Domain 3 is 20% of the exam and lives almost entirely here: the CLAUDE.md hierarchy, path-scoped rules, skills, planning mode, and the CLI for CI/CD.</p>
+          </div>
+
+          <h2><span class="h2-num">5.1</span>The CLAUDE.md hierarchy</h2>
+          <div class="figure">
+            <svg viewBox="0 0 760 210" role="img" aria-label="CLAUDE.md three-level hierarchy">
+              <rect class="dg-node" x="120" y="20" width="520" height="50" rx="10"/>
+              <text class="dg-label" x="140" y="42" >User · ~/.claude/CLAUDE.md</text>
+              <text class="dg-sub" x="630" y="48" text-anchor="end">personal · NOT in VCS</text>
+
+              <rect class="dg-node-clay" x="120" y="85" width="520" height="50" rx="10"/>
+              <text class="dg-label" x="140" y="107">Project · .claude/CLAUDE.md or root CLAUDE.md</text>
+              <text class="dg-sub" x="630" y="113" text-anchor="end">team · in VCS</text>
+
+              <rect class="dg-node-blue" x="120" y="150" width="520" height="50" rx="10"/>
+              <text class="dg-label" x="140" y="172">Directory · CLAUDE.md in a subfolder</text>
+              <text class="dg-sub" x="630" y="178" text-anchor="end">local to that folder</text>
+            </svg>
+            <div class="figcap">Three levels. The classic exam bug: team guidance placed at <b>user</b> level, so new teammates never receive it.</div>
+          </div>
+          <div class="callout warn">
+            <div class="co-title">The most-tested CLAUDE.md mistake</div>
+            <p>Three developers' "always add error handling" rule works, but a new hire's doesn't — because it lives in their personal <code>~/.claude/CLAUDE.md</code>, not the project <code>.claude/CLAUDE.md</code>. <strong>Fix:</strong> move it to the project file so everyone gets it (practice Q37).</p>
+          </div>
+
+          <h2><span class="h2-num">5.2</span><code>@path</code> imports &amp; <code>.claude/rules/</code></h2>
+          <p>CLAUDE.md can import other files with <code>@path</code> (no space, relative or absolute, max nesting depth 5) to stay modular:</p>
+          <div class="code">
+            <div class="code-head"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span><span class="code-file">CLAUDE.md</span><span class="code-lang">markdown</span></div>
+            <pre data-lang="markdown"><code>Coding standards are in @./standards/coding-style.md
+Test requirements are in @./standards/testing-requirements.md
+Overview in @README.md and dependencies in @package.json</code></pre>
+          </div>
+          <p>For larger codebases, <code>.claude/rules/</code> splits guidance into topic files, each with optional YAML frontmatter that scopes it to file globs:</p>
+          <div class="code">
+            <div class="code-head"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span><span class="code-file">.claude/rules/testing.md</span><span class="code-lang">yaml</span></div>
+            <pre data-lang="yaml"><code>---
+paths: ["**/*.test.tsx", "**/*.test.ts"]
+---
+
+Tests must use describe/it blocks.
+Use data factories instead of hardcoding.
+Do not mock the database — use a test database.</code></pre>
+          </div>
+          <div class="callout exam">
+            <div class="co-title">Path-scoped rules vs. directory CLAUDE.md</div>
+            <p>A path rule loads <strong>only</strong> when Claude edits a matching file — saving context. Use <code>.claude/rules/</code> with globs when a convention spans many directories (e.g. tests scattered next to code). Use a directory-level CLAUDE.md when it's tied to one folder. Globs win for cross-cutting patterns (practice Q40).</p>
+          </div>
+
+          <h2><span class="h2-num">5.3</span>Slash commands &amp; skills</h2>
+          <p>Slash commands are reusable prompt templates invoked via <code>/name</code>. In current Claude Code, <code>.claude/commands/</code> and <code>.claude/skills/</code> both create <code>/name</code> commands; skills add a <code>SKILL.md</code> with frontmatter.</p>
+          <div class="code">
+            <div class="code-head"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span><span class="code-file">.claude/skills/analyze/SKILL.md</span><span class="code-lang">yaml</span></div>
+            <pre data-lang="yaml"><code>---
+context: fork
+allowed-tools: ["Read", "Grep", "Glob"]
+argument-hint: "Path to the directory to analyze"
+---
+
+Analyze the code structure in the specified directory.
+Output a report on dependencies and architectural patterns.</code></pre>
+          </div>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Frontmatter</th><th>Effect</th></tr></thead>
+              <tbody>
+                <tr><td><code>context: fork</code></td><td>Runs in an isolated subagent — verbose output won't pollute the main session</td></tr>
+                <tr><td><code>allowed-tools</code></td><td>Restricts the toolset (e.g. can't delete files if not allowed)</td></tr>
+                <tr><td><code>argument-hint</code></td><td>Prompts for an argument when invoked without one</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Location</th><th>Scope</th></tr></thead>
+              <tbody>
+                <tr><td><code>.claude/commands/</code> · <code>.claude/skills/</code></td><td><strong>Project</strong> — in VCS, available to the whole team on clone</td></tr>
+                <tr><td><code>~/.claude/commands/</code> · <code>~/.claude/skills/</code></td><td><strong>User</strong> — personal, not shared. Overrides a project skill of the same name</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p><strong>Skill vs. CLAUDE.md:</strong> a skill is on-demand for a specific task (review, analysis, generation); CLAUDE.md is always-loaded standards.</p>
+
+          <h2><span class="h2-num">5.4</span>Planning mode vs. direct execution</h2>
+          <div class="figure">
+            <svg viewBox="0 0 760 170" role="img" aria-label="Planning vs direct execution">
+              <rect class="dg-node-blue" x="30" y="30" width="340" height="115" rx="10"/>
+              <text class="dg-label" x="200" y="56" text-anchor="middle">Planning mode</text>
+              <text class="dg-sub" x="200" y="80" text-anchor="middle">investigate · no changes</text>
+              <text class="dg-sub" x="200" y="98" text-anchor="middle">large/architectural · many approaches</text>
+              <text class="dg-sub" x="200" y="116" text-anchor="middle">unfamiliar code · migrations 45+ files</text>
+              <text class="dg-sub" x="200" y="134" text-anchor="middle" fill="#268bd2">user approves the plan first</text>
+
+              <rect class="dg-node-clay" x="390" y="30" width="340" height="115" rx="10"/>
+              <text class="dg-label" x="560" y="56" text-anchor="middle">Direct execution</text>
+              <text class="dg-sub" x="560" y="80" text-anchor="middle">single-file fix · clear stack trace</text>
+              <text class="dg-sub" x="560" y="98" text-anchor="middle">one validation check</text>
+              <text class="dg-sub" x="560" y="116" text-anchor="middle">well-understood, unambiguous</text>
+              <text class="dg-sub" x="560" y="134" text-anchor="middle" fill="#cb4b16">act immediately</text>
+            </svg>
+            <div class="figcap">Plan when the approach is uncertain or the blast radius is large; execute directly when the change is small and clear. Often: plan to discover, then execute.</div>
+          </div>
+          <p>The <strong>Explore subagent</strong> isolates verbose discovery output and returns only a summary — preventing context-window exhaustion in multi-phase tasks.</p>
+
+          <h2><span class="h2-num">5.5</span>The CLI for CI/CD</h2>
+          <p>The <code>-p</code> / <code>--print</code> flag runs Claude Code non-interactively — the <strong>only</strong> correct way in a pipeline:</p>
+          <div class="code">
+            <div class="code-head"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span><span class="code-file">ci.sh</span><span class="code-lang">bash</span></div>
+            <pre data-lang="bash"><code># Non-interactive: process prompt, print to stdout, exit
+claude -p "Analyze this pull request for security issues"
+
+# Structured output for automated PR comments
+claude -p "Review this PR" --output-format json --json-schema '{"type":"object"}'</code></pre>
+          </div>
+          <div class="callout note">
+            <div class="co-title">Session context isolation</div>
+            <p>The same session that <em>generated</em> code is worse at <em>reviewing</em> it — it keeps its own reasoning and won't challenge itself. Use a fresh, independent instance for review. When re-reviewing after new commits, include prior findings and ask Claude to report only new/unresolved issues.</p>
+          </div>
+          <p>Other session controls: <code>--resume &lt;name&gt;</code> continues a saved session (risk: stale tool results if files changed); <code>fork_session</code> branches from shared context to compare approaches; <code>/compact</code> compresses history (risk: losing exact numbers); <code>/memory</code> edits CLAUDE.md for cross-session notes.</p>
+
+          <div class="takeaways">
+            <h3>Key takeaways</h3>
+            <ul>
+              <li>CLAUDE.md: user (personal) · project (team, VCS) · directory. Team rules go in the <strong>project</strong> file.</li>
+              <li><code>.claude/rules/</code> with <code>paths</code> globs loads conventions only for matching files — best for cross-cutting patterns.</li>
+              <li>Skills: <code>context: fork</code> isolates output · <code>allowed-tools</code> restricts · <code>argument-hint</code> prompts. Project vs. user location decides sharing.</li>
+              <li>Plan for big/uncertain work, execute directly for small/clear; use <code>-p</code> for CI and a <em>fresh</em> instance for review.</li>
+            </ul>
+          </div>
+
+          <div class="quiz" data-quiz="ch5">
+            <div class="quiz-head"><span class="quiz-badge">Quiz</span><h3>Check yourself · Chapter 5</h3></div>
+            <div class="quiz-sub">Four questions on Claude Code configuration.</div>
+
+            <div class="q">
+              <div class="q-text"><span class="qn">Q1</span> A <code>/review</code> command must reach every developer when they clone the repo. Where does the file go?</div>
+              <div class="opts">
+                <button class="opt" data-correct><code>.claude/commands/</code> in the project repo</button>
+                <button class="opt"><code>~/.claude/commands/</code></button>
+                <button class="opt">The root <code>CLAUDE.md</code></button>
+                <button class="opt"><code>.claude/config.json</code></button>
+              </div>
+              <div class="q-explain"><b>Correct: A.</b> Project commands in <code>.claude/commands/</code> are version-controlled and auto-available to everyone. User scope is personal; <code>config.json</code> isn't where commands live.</div>
+            </div>
+
+            <div class="q">
+              <div class="q-text"><span class="qn">Q2</span> Tests are co-located across the codebase and must follow the same conventions regardless of folder. Most supported way?</div>
+              <div class="opts">
+                <button class="opt">Put everything in the root CLAUDE.md.</button>
+                <button class="opt" data-correct><code>.claude/rules/</code> files with YAML <code>paths</code> globs like <code>**/*.test.tsx</code>.</button>
+                <button class="opt">A CLAUDE.md in every directory.</button>
+                <button class="opt">A skill invoked manually per test.</button>
+              </div>
+              <div class="q-explain"><b>Correct: B.</b> Glob-based path rules apply conventions by file type regardless of location — ideal for scattered tests. Directory CLAUDE.md fails when files span many folders.</div>
+            </div>
+
+            <div class="q">
+              <div class="q-text"><span class="qn">Q3</span> A <code>/analyze-codebase</code> skill dumps huge output and makes Claude lose the original task. Fix while keeping full analysis?</div>
+              <div class="opts">
+                <button class="opt" data-correct>Add <code>context: fork</code> to run it in an isolated subagent.</button>
+                <button class="opt">Switch to a smaller model.</button>
+                <button class="opt">Split into three smaller skills.</button>
+                <button class="opt">Summarise results before display.</button>
+              </div>
+              <div class="q-explain"><b>Correct: A.</b> <code>context: fork</code> isolates the verbose output so it doesn't pollute the main context window, preserving the original task.</div>
+            </div>
+
+            <div class="q">
+              <div class="q-text"><span class="qn">Q4</span> A CI job runs <code>claude "Analyze this PR"</code> and hangs. What's the fix?</div>
+              <div class="opts">
+                <button class="opt">Set <code>CLAUDE_HEADLESS=true</code>.</button>
+                <button class="opt">Redirect stdin from <code>/dev/null</code>.</button>
+                <button class="opt" data-correct>Use the <code>-p</code> flag: <code>claude -p "Analyze this PR"</code>.</button>
+                <button class="opt">Add <code>--batch</code>.</button>
+              </div>
+              <div class="q-explain"><b>Correct: C.</b> <code>-p</code> / <code>--print</code> is the documented non-interactive mode: process, print, exit. The others are non-existent flags or Unix workarounds.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== CHAPTER 6 ==================== -->
+      <section class="page" id="page-ch6">
+        <div class="wrap">
+          <div class="page-head">
+            <div class="eyebrow">Chapter 06 · Prompting</div>
+            <h1 class="title">Prompt Engineering, <em>Advanced</em></h1>
+            <p class="lede">Few-shot examples, explicit criteria, chaining, the interview pattern, and validation loops. The engine room of Domain 4.</p>
+          </div>
+
+          <h2><span class="h2-num">6.1</span>Few-shot prompting</h2>
+          <p>Few-shot means including 2–4 input/output examples to demonstrate expected behaviour. It beats prose because a vague instruction ("be more precise") is interpreted many ways, while an example shows the exact format and decision logic — and the model <em>generalises</em> the pattern rather than parroting it.</p>
+          <div class="code">
+            <div class="code-head"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span><span class="code-file">few_shot_ambiguous.txt</span><span class="code-lang">text</span></div>
+            <pre data-lang="text"><code>Request: "My order is broken"
+Action: get_customer -> lookup_order -> check status.
+Why: "broken" may mean damaged; you need order details first.
+
+Request: "Get me a manager"
+Action: Immediately call escalate_to_human.
+Why: explicit request for a human — do not try to solve.</code></pre>
+          </div>
+          <p>Few-shot shines for ambiguous tool selection, output formatting, separating acceptable vs. problematic code, extraction across document formats, and informal measurements ("two handfuls of rice" → <code>~100g</code>). Pair it with normalization rules in the prompt (dates → ISO 8601, "half" → <code>0.5</code>) to prevent semantic drift.</p>
+
+          <h2><span class="h2-num">6.2</span>Explicit criteria beat vague instructions</h2>
+          <div class="compare">
+            <div class="card bad">
+              <h4>✗ Vague</h4>
+              <p>"Check code comments for accuracy. Be conservative — report only high-confidence findings."</p>
+            </div>
+            <div class="card good">
+              <h4>✓ Explicit</h4>
+              <p>"Flag a comment ONLY if: (1) it contradicts actual behaviour, (2) it references a non-existent symbol, (3) a TODO refers to an already-fixed bug. Do NOT flag stylistic or minor wording issues."</p>
+            </div>
+          </div>
+          <p>Define severity with examples too — CRITICAL (runtime failure), HIGH (security hole), MEDIUM (logic bug, no immediate impact), LOW (code quality). Vague guidance like "be more conservative" reliably underperforms concrete categories.</p>
+          <div class="callout note">
+            <div class="co-title">False positives erode trust</div>
+            <p>High false-positive rates in noisy categories (style, naming) make developers dismiss <em>everything</em> — including accurate security findings. The exam's fix: temporarily disable the noisy categories, keep high-precision ones, improve prompts, then re-enable (practice Q23/Q29).</p>
+          </div>
+
+          <h2><span class="h2-num">6.3</span>Prompt chaining</h2>
+          <p>Break a complex task into focused steps. Reviewing 14 files at once causes <strong>attention dilution</strong> — deep analysis on some, shallow on others, contradictory verdicts. Instead: analyse each file individually, then run a separate cross-file integration pass.</p>
+          <div class="figure">
+            <svg viewBox="0 0 760 130" role="img" aria-label="Prompt chaining per-file then integration">
+              <rect class="dg-node-clay" x="20" y="40" width="150" height="52" rx="9"/><text class="dg-label" x="95" y="70" text-anchor="middle">analyze auth.ts</text>
+              <rect class="dg-node-clay" x="190" y="40" width="150" height="52" rx="9"/><text class="dg-label" x="265" y="70" text-anchor="middle">analyze db.ts</text>
+              <rect class="dg-node-clay" x="360" y="40" width="150" height="52" rx="9"/><text class="dg-label" x="435" y="70" text-anchor="middle">analyze routes.ts</text>
+              <rect class="dg-node-blue" x="555" y="40" width="185" height="52" rx="9"/><text class="dg-label" x="647" y="66" text-anchor="middle">integration pass</text><text class="dg-sub" x="647" y="83" text-anchor="middle">cross-file flows</text>
+              <line class="dg-edge" x1="510" y1="66" x2="551" y2="66" marker-end="url(#ar6)"/>
+              <defs><marker id="ar6" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path class="dg-arrow" d="M0,0 L9,4.5 L0,9 z"/></marker></defs>
+            </svg>
+            <div class="figcap">Per-file passes give consistent depth; a final integration pass catches cross-file issues. Chaining suits <b>predictable</b> tasks; dynamic decomposition suits open-ended ones (Ch 8).</div>
+          </div>
+
+          <h2><span class="h2-num">6.4</span>Iterative refinement (Domain 3.5)</h2>
+          <p>Three techniques for converging on the right output through iteration:</p>
+          <ul>
+            <li><strong>Concrete input/output examples</strong> — the single most effective way to communicate a transformation when prose is interpreted inconsistently. Show 2–3 representative pairs (this is the fix in sample Q31).</li>
+            <li><strong>The interview pattern</strong> — before implementing, Claude asks clarifying questions. Useful in unfamiliar domains (fintech, healthcare), for non-obvious implications (cache invalidation, failure modes), and when multiple approaches depend on context the user hasn't stated.</li>
+            <li><strong>Test-driven iteration</strong> — write the test suite <em>first</em> (covering expected behaviour, edge cases, and performance requirements), then iterate by feeding the <em>test failures</em> back to guide progressive improvement. The tests pin the target so each round measurably converges.</li>
+          </ul>
+          <div class="callout exam">
+            <div class="co-title">One message or several? Interacting vs. independent issues</div>
+            <p>When fixes <strong>interact</strong> (changing one affects another), give Claude <em>all</em> of them in a single detailed message so it can reason about them together. When issues are <strong>independent</strong>, iterate <em>sequentially</em> — one fix per round — to keep each change focused and easy to verify.</p>
+          </div>
+
+          <h2><span class="h2-num">6.5</span>Validation, retry-with-feedback &amp; self-correction</h2>
+          <p>When extracted data fails validation, retry with the original document, the previous incorrect extraction, and the <em>specific</em> error:</p>
+          <div class="code">
+            <div class="code-head"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span><span class="code-file">retry_feedback.txt</span><span class="code-lang">text</span></div>
+            <pre data-lang="text"><code>Field 'total' = 150, but sum(line_items) = 145. Re-check values.</code></pre>
+          </div>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Retry helps</th><th>Retry won't help</th></tr></thead>
+              <tbody>
+                <tr><td>Format errors (wrong date format)</td><td>Information absent from the source</td></tr>
+                <tr><td>Structural errors (field misplaced)</td><td>Required context is in another, unprovided document</td></tr>
+                <tr><td>Arithmetic inconsistencies (re-checkable)</td><td>—</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p><strong>Pydantic</strong> is the exam's reference validator: structural checks (types, enums), semantic checks (custom validators for business rules), validate-retry loops, and JSON-Schema generation as a single source of truth. <strong>Self-correction</strong> extracts both a <code>stated_total</code> and a <code>calculated_total</code>, setting <code>conflict_detected</code> when they differ.</p>
+          <div class="callout tip">
+            <div class="co-title">Track the trigger with <code>detected_pattern</code></div>
+            <p>For review/extraction findings, add a <code>detected_pattern</code> field recording <em>which</em> code construct or rule triggered the finding. When developers dismiss findings, you can analyse these patterns to spot systematic false positives and tune the prompt — turning dismissals into a feedback signal rather than noise.</p>
+          </div>
+
+          <div class="takeaways">
+            <h3>Key takeaways</h3>
+            <ul>
+              <li>Few-shot (2–4 examples) is the most reliable way to fix inconsistent format/behaviour — especially for ambiguous cases.</li>
+              <li>Explicit categorical criteria beat vague conservativeness; manage false positives by category.</li>
+              <li>Chain focused passes to beat attention dilution; per-file + integration pass for big reviews.</li>
+              <li>Iterative refinement: concrete examples · interview pattern · test-driven iteration; batch interacting fixes, sequence independent ones.</li>
+              <li>Retry-with-feedback fixes format/structure/arithmetic — not missing information.</li>
+            </ul>
+          </div>
+
+          <div class="quiz" data-quiz="ch6">
+            <div class="quiz-head"><span class="quiz-badge">Quiz</span><h3>Check yourself · Chapter 6</h3></div>
+            <div class="quiz-sub">Three questions on prompt engineering.</div>
+
+            <div class="q">
+              <div class="q-text"><span class="qn">Q1</span> You described an output transformation in prose; after two tries the structure still drifts. Best next move?</div>
+              <div class="opts">
+                <button class="opt">Rewrite the prose with more technical precision.</button>
+                <button class="opt" data-correct>Provide 2–3 concrete input/output examples of the transformation.</button>
+                <button class="opt">Ask Claude to restate its understanding.</button>
+                <button class="opt">Add a JSON schema and validate after each try.</button>
+              </div>
+              <div class="q-explain"><b>Correct: B.</b> Concrete examples remove the ambiguity inherent in prose by showing exact field nesting and formatting — the root cause of misinterpretation.</div>
+            </div>
+
+            <div class="q">
+              <div class="q-text"><span class="qn">Q2</span> A comment-checking prompt says "check that comments are accurate." It flags fine TODOs and misses truly wrong comments. Root-cause fix?</div>
+              <div class="opts">
+                <button class="opt">Add <code>git blame</code> data.</button>
+                <button class="opt">Filter out TODO/FIXME before analysis.</button>
+                <button class="opt" data-correct>Specify explicit criteria: flag only when the comment's claimed behaviour contradicts the code.</button>
+                <button class="opt">Add few-shot examples of misleading comments.</button>
+              </div>
+              <div class="q-explain"><b>Correct: C.</b> Replacing a vague instruction with a precise definition of "problematic" reduces both false positives and misses.</div>
+            </div>
+
+            <div class="q">
+              <div class="q-text"><span class="qn">Q3</span> Extraction returns <code>total=150</code> but line items sum to 145. The numbers <em>are</em> in the document. Will retry-with-feedback help?</div>
+              <div class="opts">
+                <button class="opt" data-correct>Yes — arithmetic inconsistencies are re-checkable; include the specific error in the retry.</button>
+                <button class="opt">No — retries never fix numeric errors.</button>
+                <button class="opt">No — the data must be missing.</button>
+                <button class="opt">Only if you switch to a larger model.</button>
+              </div>
+              <div class="q-explain"><b>Correct: A.</b> When the information is present, a retry that names the discrepancy lets the model re-check and correct. Retry only fails when the info is genuinely absent.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== CHAPTER 7 ==================== -->
+      <section class="page" id="page-ch7">
+        <div class="wrap">
+          <div class="page-head">
+            <div class="eyebrow">Chapter 07 · Batches</div>
+            <h1 class="title">Message <em>Batches API</em></h1>
+            <p class="lede">Half the cost, up to a day of latency, no mid-request tool calling. One trade-off table answers most batch questions on the exam.</p>
+          </div>
+
+          <h2><span class="h2-num">7.1</span>The trade-off</h2>
+          <div class="exam-stats">
+            <div class="stat"><div class="num">50%</div><div class="lbl">cost savings</div></div>
+            <div class="stat"><div class="num">24h</div><div class="lbl">max window</div></div>
+            <div class="stat"><div class="num">✗</div><div class="lbl">multi-turn tools</div></div>
+            <div class="stat"><div class="num">custom_id</div><div class="lbl">correlation</div></div>
+          </div>
+          <p>The Batch API submits requests for asynchronous processing: <strong>50% cheaper</strong>, processed within <strong>up to 24 hours</strong> (no latency SLA), <strong>no multi-turn tool calling</strong> (one request = one response), and a <code>custom_id</code> per request to correlate results.</p>
+          <div class="callout exam">
+            <div class="co-title">Why batch can't do iterative tool calling</div>
+            <p>A "fire-and-forget" async model has no way to pause mid-request, run a tool, and feed the result back for Claude to continue. Any workflow needing multiple tool round-trips in one logical interaction is fundamentally incompatible (practice Q18).</p>
+          </div>
+
+          <h2><span class="h2-num">7.2</span>Batch vs. synchronous</h2>
+          <div class="figure">
+            <svg viewBox="0 0 760 160" role="img" aria-label="Batch vs synchronous decision">
+              <rect class="dg-node-clay" x="30" y="30" width="340" height="110" rx="10"/>
+              <text class="dg-label" x="200" y="56" text-anchor="middle">Synchronous</text>
+              <text class="dg-sub" x="200" y="80" text-anchor="middle">someone is waiting (blocking)</text>
+              <text class="dg-sub" x="200" y="98" text-anchor="middle">pre-merge checks · interactive review</text>
+              <text class="dg-sub" x="200" y="120" text-anchor="middle" fill="#cb4b16">latency matters</text>
+
+              <rect class="dg-node-blue" x="390" y="30" width="340" height="110" rx="10"/>
+              <text class="dg-label" x="560" y="56" text-anchor="middle">Batch</text>
+              <text class="dg-sub" x="560" y="80" text-anchor="middle">scheduled / non-blocking</text>
+              <text class="dg-sub" x="560" y="98" text-anchor="middle">overnight reports · weekly audits · 10k docs</text>
+              <text class="dg-sub" x="560" y="120" text-anchor="middle" fill="#268bd2">cost matters, deadline is flexible</text>
+            </svg>
+            <div class="figcap">If a developer is blocked on the result → synchronous. If it runs overnight or in bulk → batch.</div>
+          </div>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Task</th><th>API</th><th>Why</th></tr></thead>
+              <tbody>
+                <tr><td>Pre-merge PR check</td><td><span class="pill warn">Sync</span></td><td>Developer is waiting; 24h unacceptable</td></tr>
+                <tr><td>Overnight tech-debt report</td><td><span class="pill">Batch</span></td><td>Needed by morning; 50% savings</td></tr>
+                <tr><td>Weekly security audit</td><td><span class="pill">Batch</span></td><td>Not urgent; 50% savings</td></tr>
+                <tr><td>Interactive code review</td><td><span class="pill warn">Sync</span></td><td>Immediate response required</td></tr>
+                <tr><td>Processing 10,000 documents</td><td><span class="pill">Batch</span></td><td>Bulk; savings significant</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2><span class="h2-num">7.3</span><code>custom_id</code>, failures &amp; SLA planning</h2>
+          <p><code>custom_id</code> links each result to its source document, so on failure you re-submit <em>only</em> the failures — never re-processing successes. A typical recovery: 100 docs → 95 succeed, 5 hit the context limit → identify by <code>custom_id</code> → split the long docs → re-submit just those 5.</p>
+          <div class="callout note">
+            <div class="co-title">SLA math</div>
+            <p>Need a result in 30 hours with up to 24h processing? Your submission window is <code>30 − 24 = 6 hours</code> — submit no later than 24h before the deadline. For steady throughput, split into ~4-hour submission windows.</p>
+          </div>
+
+          <div class="takeaways">
+            <h3>Key takeaways</h3>
+            <ul>
+              <li>Batch = 50% cheaper, up to 24h, <strong>no</strong> multi-turn tool calling, <code>custom_id</code> correlation.</li>
+              <li>Blocking/interactive → synchronous; overnight/bulk → batch.</li>
+              <li>Iterative tool-calling workflows can't use batch at all.</li>
+              <li>Re-submit only failed <code>custom_id</code>s; plan submission windows against the 24h ceiling.</li>
+            </ul>
+          </div>
+
+          <div class="quiz" data-quiz="ch7">
+            <div class="quiz-head"><span class="quiz-badge">Quiz</span><h3>Check yourself · Chapter 7</h3></div>
+            <div class="quiz-sub">Three questions on batch processing.</div>
+
+            <div class="q">
+              <div class="q-text"><span class="qn">Q1</span> A manager wants to move both a blocking pre-merge check and an overnight tech-debt report to the Batch API for 50% savings. Your assessment?</div>
+              <div class="opts">
+                <button class="opt">Move both and poll for completion.</button>
+                <button class="opt" data-correct>Batch only the tech-debt report; keep the pre-merge check synchronous.</button>
+                <button class="opt">Keep both synchronous to avoid ordering issues.</button>
+                <button class="opt">Move both with a sync fallback if batches run long.</button>
+              </div>
+              <div class="q-explain"><b>Correct: B.</b> Up-to-24h latency is fine overnight but unacceptable for a blocking check where developers wait. Match each workload to its latency requirement.</div>
+            </div>
+
+            <div class="q">
+              <div class="q-text"><span class="qn">Q2</span> Your code review uses iterative tool calls to fetch related files mid-analysis. What's the primary blocker to batching it?</div>
+              <div class="opts">
+                <button class="opt">Batch lacks correlation IDs.</button>
+                <button class="opt" data-correct>The async model can't execute tools mid-request and feed results back for Claude to continue.</button>
+                <button class="opt">Batch doesn't support tool definitions at all.</button>
+                <button class="opt">24h latency is the only issue; it would otherwise work.</button>
+              </div>
+              <div class="q-explain"><b>Correct: B.</b> Fire-and-forget processing can't pause for a tool round-trip mid-request — incompatible with multi-turn tool workflows.</div>
+            </div>
+
+            <div class="q">
+              <div class="q-text"><span class="qn">Q3</span> Out of 100 batched documents, 5 fail on context limit. Most efficient recovery?</div>
+              <div class="opts">
+                <button class="opt">Re-submit all 100 to be safe.</button>
+                <button class="opt" data-correct>Identify the 5 by <code>custom_id</code>, adjust strategy (e.g. chunk), and re-submit only those.</button>
+                <button class="opt">Switch the whole batch to synchronous.</button>
+                <button class="opt">Discard the 5 and accept partial results.</button>
+              </div>
+              <div class="q-explain"><b>Correct: B.</b> <code>custom_id</code> lets you target just the failures, avoiding re-processing the 95 successes.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== CHAPTER 8 ==================== -->
+      <section class="page" id="page-ch8">
+        <div class="wrap">
+          <div class="page-head">
+            <div class="eyebrow">Chapter 08 · Decomposition</div>
+            <h1 class="title">Task Decomposition <em>Strategies</em></h1>
+            <p class="lede">Fixed pipelines vs. dynamic adaptation — and why splitting a big review into passes outperforms a single megaprompt.</p>
+          </div>
+
+          <h2><span class="h2-num">8.1</span>Fixed pipelines vs. dynamic decomposition</h2>
+          <div class="compare">
+            <div class="card good">
+              <h4>Fixed pipeline (prompt chaining)</h4>
+              <p>Every step known up front:<br><code>Doc → metadata → extract → validate → enrich → output</code></p>
+              <p>Use for predictable, repeatable tasks needing stability (reviews, migrations).</p>
+            </div>
+            <div class="card good">
+              <h4>Dynamic adaptive decomposition</h4>
+              <p>Subtasks emerge from intermediate results: map structure → find untested modules → prioritise by risk → adapt when an external dependency appears.</p>
+              <p>Use for open-ended investigation where scope is unknown.</p>
+            </div>
+          </div>
+          <div class="callout exam">
+            <div class="co-title">Quick rule</div>
+            <p>Predictable &amp; repeatable → <strong>prompt chaining</strong>. Open-ended, each step depends on the last → <strong>dynamic decomposition</strong>. "Add tests to a legacy codebase" is dynamic; "review every PR the same way" is fixed.</p>
+          </div>
+
+          <h2><span class="h2-num">8.2</span>Multi-pass code review</h2>
+          <p>For a PR touching 10+ files, a single pass over everything causes <strong>attention dilution</strong>: deep analysis on some files, shallow on others, missed obvious bugs, and contradictory verdicts (a pattern flagged in one file, approved in identical code in another).</p>
+          <p>Restructure into focused passes — analyse each file for local issues, then a separate integration pass for cross-file data flows. A bigger context window does <em>not</em> fix this; attention quality, not capacity, is the bottleneck.</p>
+
+          <div class="takeaways">
+            <h3>Key takeaways</h3>
+            <ul>
+              <li>Fixed pipeline for predictable work; dynamic decomposition for open-ended investigation.</li>
+              <li>Big reviews → per-file passes + one integration pass.</li>
+              <li>Attention dilution, not context size, causes inconsistent multi-file reviews.</li>
+            </ul>
+          </div>
+
+          <div class="quiz" data-quiz="ch8">
+            <div class="quiz-head"><span class="quiz-badge">Quiz</span><h3>Check yourself · Chapter 8</h3></div>
+            <div class="quiz-sub">Two questions on decomposition.</div>
+            <div class="q">
+              <div class="q-text"><span class="qn">Q1</span> A 14-file PR gets inconsistent, contradictory single-pass feedback. Best restructure?</div>
+              <div class="opts">
+                <button class="opt">Switch to a model with a larger context window.</button>
+                <button class="opt" data-correct>Per-file passes for local issues, then a separate integration pass for cross-file flows.</button>
+                <button class="opt">Require developers to split PRs into 3–4 files.</button>
+                <button class="opt">Run three full-PR passes and keep issues found in ≥2.</button>
+              </div>
+              <div class="q-explain"><b>Correct: B.</b> Focused passes fix attention dilution at the root; a bigger window doesn't improve attention quality, and consensus voting suppresses real bugs.</div>
+            </div>
+            <div class="q">
+              <div class="q-text"><span class="qn">Q2</span> "Add tests to a legacy codebase you've never seen." Which strategy fits?</div>
+              <div class="opts">
+                <button class="opt">A fixed pipeline defined entirely up front.</button>
+                <button class="opt" data-correct>Dynamic decomposition — map structure first, then build a prioritised plan as you learn.</button>
+                <button class="opt">A single megaprompt over all files.</button>
+                <button class="opt">Batch processing.</button>
+              </div>
+              <div class="q-explain"><b>Correct: B.</b> Scope is unknown and each step depends on discoveries — the signature of dynamic adaptive decomposition.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== CHAPTER 9 ==================== -->
+      <section class="page" id="page-ch9">
+        <div class="wrap">
+          <div class="page-head">
+            <div class="eyebrow">Chapter 09 · Escalation</div>
+            <h1 class="title">Escalation &amp; <em>Human-in-the-Loop</em></h1>
+            <p class="lede">When to hand off to a person — and, just as important, which signals are <em>not</em> reliable triggers.</p>
+          </div>
+
+          <h2><span class="h2-num">9.1</span>Reliable triggers vs. false signals</h2>
+          <div class="compare">
+            <div class="card good">
+              <h4>✓ Reliable triggers</h4>
+              <p>Explicit request ("get me a manager") → escalate immediately, don't try to solve</p>
+              <p>Policy gap / silence (competitor price match when policy covers only your own site)</p>
+              <p>Can't make progress after reasonable attempts</p>
+              <p>Financial op above threshold (enforce via hook)</p>
+              <p>Multiple customer matches → ask for another identifier, don't guess</p>
+            </div>
+            <div class="card bad">
+              <h4>✗ Unreliable signals</h4>
+              <p>Sentiment analysis — mood ≠ complexity</p>
+              <p>Model self-rated confidence (1–10) — can be confidently wrong</p>
+              <p>An automatic classifier — over-engineering, needs training data you may lack</p>
+            </div>
+          </div>
+
+          <h2><span class="h2-num">9.2</span>Escalation patterns</h2>
+          <div class="figure">
+            <svg viewBox="0 0 760 175" role="img" aria-label="Escalation patterns">
+              <rect class="dg-node-red" x="30" y="30" width="220" height="120" rx="10"/>
+              <text class="dg-label" x="140" y="56" text-anchor="middle">Immediate</text>
+              <text class="dg-sub" x="140" y="80" text-anchor="middle">"speak to a manager"</text>
+              <text class="dg-sub" x="140" y="100" text-anchor="middle">→ escalate_to_human</text>
+              <text class="dg-sub" x="140" y="124" text-anchor="middle" fill="#dc322f">no solving attempt</text>
+
+              <rect class="dg-node-clay" x="270" y="30" width="220" height="120" rx="10"/>
+              <text class="dg-label" x="380" y="56" text-anchor="middle">After attempt</text>
+              <text class="dg-sub" x="380" y="80" text-anchor="middle">try warranty / refund</text>
+              <text class="dg-sub" x="380" y="100" text-anchor="middle">unsatisfied → escalate</text>
+
+              <rect class="dg-node-blue" x="510" y="30" width="220" height="120" rx="10"/>
+              <text class="dg-label" x="620" y="56" text-anchor="middle">Nuanced</text>
+              <text class="dg-sub" x="620" y="80" text-anchor="middle">acknowledge emotion</text>
+              <text class="dg-sub" x="620" y="100" text-anchor="middle">offer resolution</text>
+              <text class="dg-sub" x="620" y="124" text-anchor="middle" fill="#268bd2">escalate only on reiteration</text>
+            </svg>
+            <div class="figcap">Frustration alone is <b>not</b> a manager request. Acknowledge → resolve → escalate only if the customer insists again.</div>
+          </div>
+
+          <h2><span class="h2-num">9.3</span>Structured handoff &amp; confidence calibration</h2>
+          <p>On escalation, pass a self-contained summary — the human sees <em>only</em> this, not the transcript: customer id/name, issue summary, order id, root cause, actions taken, recommended action, escalation reason.</p>
+          <div class="callout note">
+            <div class="co-title">Stratified sampling</div>
+            <p>For extraction systems, output field-level confidence and route low-confidence/ambiguous cases to humans. Audit even high-confidence outputs with <strong>stratified random sampling</strong> — a 97% aggregate accuracy can hide 40% errors on one document type. Analyse by type and field, not just overall.</p>
+          </div>
+
+          <div class="takeaways">
+            <h3>Key takeaways</h3>
+            <ul>
+              <li>Escalate on: explicit request, policy gap, stuck, over-threshold financial, ambiguous identity.</li>
+              <li>Sentiment, self-rated confidence, and bespoke classifiers are unreliable triggers.</li>
+              <li>Acknowledge → resolve → escalate only on reiteration; never on first frustration.</li>
+              <li>Handoff summaries must be complete; audit with stratified sampling by type and field.</li>
+            </ul>
+          </div>
+
+          <div class="quiz" data-quiz="ch9">
+            <div class="quiz-head"><span class="quiz-badge">Quiz</span><h3>Check yourself · Chapter 9</h3></div>
+            <div class="quiz-sub">Three questions on escalation.</div>
+            <div class="q">
+              <div class="q-text"><span class="qn">Q1</span> An agent resolves only 55% (target 80%): it escalates simple cases and tries complex policy exceptions itself. Best fix?</div>
+              <div class="opts">
+                <button class="opt">Self-rated confidence with auto-escalation below a threshold.</button>
+                <button class="opt">A classifier trained on historical tickets.</button>
+                <button class="opt" data-correct>Add explicit escalation criteria with few-shot examples to the system prompt.</button>
+                <button class="opt">Sentiment-based escalation.</button>
+              </div>
+              <div class="q-explain"><b>Correct: C.</b> The root cause is unclear decision boundaries. Explicit criteria + examples is the proportional, effective fix; confidence and sentiment are unreliable, a classifier is over-engineering.</div>
+            </div>
+            <div class="q">
+              <div class="q-text"><span class="qn">Q2</span> Which is the most justified escalation trigger?</div>
+              <div class="opts">
+                <button class="opt">A customer might change their mind about a cancellation.</button>
+                <button class="opt">Tracking contradicts a "didn't receive it" claim.</button>
+                <button class="opt" data-correct>Competitor price-match request when policy covers only your own site.</button>
+                <button class="opt">A message containing both a billing question and a return.</button>
+              </div>
+              <div class="q-explain"><b>Correct: C.</b> A genuine policy gap — the agent must not invent policy and should escalate for human judgment. The others are resolvable or simply multi-part.</div>
+            </div>
+            <div class="q">
+              <div class="q-text"><span class="qn">Q3</span> A name search returns multiple customer matches. What should the agent do?</div>
+              <div class="opts">
+                <button class="opt">Pick the account with the most recent order.</button>
+                <button class="opt" data-correct>Ask for an additional identifier (email, phone, order #) before any action.</button>
+                <button class="opt">Escalate to a human immediately.</button>
+                <button class="opt">Proceed with the first match.</button>
+              </div>
+              <div class="q-explain"><b>Correct: B.</b> The user has definitive knowledge of their identity; one extra turn eliminates a costly mis-identification rate. Don't guess.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== CHAPTER 10 ==================== -->
+      <section class="page" id="page-ch10">
+        <div class="wrap">
+          <div class="page-head">
+            <div class="eyebrow">Chapter 10 · Reliability</div>
+            <h1 class="title">Error Handling in <em>Multi-Agent Systems</em></h1>
+            <p class="lede">Categorise the error, recover locally when you can, and propagate <em>structured</em> context — never a generic "failed".</p>
+          </div>
+
+          <h2><span class="h2-num">10.1</span>Error categories</h2>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Category</th><th>Examples</th><th>Retryable</th><th>Agent action</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Transient</strong></td><td>Timeout, 503, network</td><td><span class="pill good">Yes</span></td><td>Retry with backoff</td></tr>
+                <tr><td><strong>Validation</strong></td><td>Bad format, missing field</td><td><span class="pill bad">No</span></td><td>Fix input &amp; retry</td></tr>
+                <tr><td><strong>Business</strong></td><td>Policy violation, threshold</td><td><span class="pill bad">No</span></td><td>Explain; offer alternative</td></tr>
+                <tr><td><strong>Permission</strong></td><td>Access denied</td><td><span class="pill bad">No</span></td><td>Escalate</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2><span class="h2-num">10.2</span>Anti-patterns</h2>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Anti-pattern</th><th>Why it's bad</th><th>Correct approach</th></tr></thead>
+              <tbody>
+                <tr><td>Generic "search unavailable"</td><td>Coordinator can't decide recovery</td><td>Return type, query, partials, alternatives</td></tr>
+                <tr><td>Silent suppression (empty = success)</td><td>Hides failure as "no matches"</td><td>Distinguish "no results" from "search failed"</td></tr>
+                <tr><td>Abort whole workflow on one failure</td><td>Loses all partial results</td><td>Continue with partials; annotate gaps</td></tr>
+                <tr><td>Infinite retries inside a subagent</td><td>Latency &amp; wasted resources</td><td>1–2 local retries, then propagate</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout exam">
+            <div class="co-title">Access failure ≠ empty result</div>
+            <p>A timeout (access failure, needs a retry decision) is semantically different from "0 results" (a valid, informative answer). Conflating them is a classic wrong answer — and distinguishing them is a classic right one (practice Q12).</p>
+          </div>
+
+          <h2><span class="h2-num">10.3</span>Structured subagent error &amp; coverage annotations</h2>
+          <div class="code">
+            <div class="code-head"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span><span class="code-file">subagent_error.json</span><span class="code-lang">json</span></div>
+            <pre data-lang="json"><code>{
+  "status": "partial_failure",
+  "failure_type": "timeout",
+  "attempted_query": "AI impact on music industry 2024",
+  "partial_results": [{"title": "AI Music Report", "relevance": 0.8}],
+  "alternative_approaches": ["Try a narrower query", "Use an alternative source"],
+  "coverage_impact": "Not covered: AI impact on music production"
+}</code></pre>
+          </div>
+          <p>This gives the coordinator everything it needs to decide: retry with a modified query, use partials, delegate elsewhere, or continue and annotate the gap. In the final synthesis, mark each section's coverage — <code>FULL</code> vs. <code>PARTIAL (search timeout)</code> — so readers know where confidence is lower (<strong>graceful degradation with transparency</strong>).</p>
+
+          <div class="takeaways">
+            <h3>Key takeaways</h3>
+            <ul>
+              <li>Categorise: transient (retry) · validation (fix input) · business (explain) · permission (escalate).</li>
+              <li>Recover locally for transient errors (1–2 retries), then propagate non-recoverable ones with partials.</li>
+              <li>Never return generic failures or silently suppress; never abort the whole workflow on one failure.</li>
+              <li>Distinguish access failures from valid empty results; annotate coverage in synthesis.</li>
+            </ul>
+          </div>
+
+          <div class="quiz" data-quiz="ch10">
+            <div class="quiz-head"><span class="quiz-badge">Quiz</span><h3>Check yourself · Chapter 10</h3></div>
+            <div class="quiz-sub">Three questions on error handling.</div>
+            <div class="q">
+              <div class="q-text"><span class="qn">Q1</span> A web-search subagent times out. Which error-propagation design best enables recovery?</div>
+              <div class="opts">
+                <button class="opt">Retry internally, then return a generic "search unavailable".</button>
+                <button class="opt">Catch the timeout and return an empty result marked success.</button>
+                <button class="opt" data-correct>Return structured context: failure type, query, partial results, alternatives.</button>
+                <button class="opt">Propagate the exception to terminate the workflow.</button>
+              </div>
+              <div class="q-explain"><b>Correct: C.</b> Structured context lets the coordinator retry, use partials, or reroute. Generic status hides info; "empty = success" masks failure; aborting loses everything.</div>
+            </div>
+            <div class="q">
+              <div class="q-text"><span class="qn">Q2</span> Three queries return: 15 papers, "0 results", "Connection timeout". Best propagation?</div>
+              <div class="opts">
+                <button class="opt">A single 67% coverage metric.</button>
+                <button class="opt">Report both "timeout" and "0 results" as failures.</button>
+                <button class="opt">Retry everything internally and report only persistent errors.</button>
+                <button class="opt" data-correct>Distinguish the access failure (timeout → retry) from the valid empty result ("0 results" → accept).</button>
+              </div>
+              <div class="q-explain"><b>Correct: D.</b> They are semantically different outcomes needing different responses — retry the timeout, accept the empty result as informative.</div>
+            </div>
+            <div class="q">
+              <div class="q-text"><span class="qn">Q3</span> A PDF-parsing subagent hits varied failures and escalates every one to the coordinator. Best improvement?</div>
+              <div class="opts">
+                <button class="opt">A dedicated error-handling agent with a shared queue.</button>
+                <button class="opt">Always return partial results marked success.</button>
+                <button class="opt">Have the coordinator validate every document first.</button>
+                <button class="opt" data-correct>Local recovery for transient failures; escalate only the unresolvable ones with partials and steps tried.</button>
+              </div>
+              <div class="q-explain"><b>Correct: D.</b> Handle errors at the lowest level that can resolve them; escalate only what's truly unrecoverable, with full context.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== CHAPTER 11 ==================== -->
+      <section class="page" id="page-ch11">
+        <div class="wrap">
+          <div class="page-head">
+            <div class="eyebrow">Chapter 11 · Context</div>
+            <h1 class="title">Context Management in <em>Production</em></h1>
+            <p class="lede">Protect critical facts from summarisation, trim noisy tool output, and position information where the model actually reads it.</p>
+          </div>
+
+          <h2><span class="h2-num">11.1</span>Extract facts into a persistent block</h2>
+          <p>History degrades during summarisation. Keep critical transactional facts in a structured block included in <em>every</em> prompt, outside the summarised history:</p>
+          <div class="code">
+            <div class="code-head"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span><span class="code-file">case_facts.txt</span><span class="code-lang">text</span></div>
+            <pre data-lang="text"><code>=== CASE FACTS (updated as new facts appear) ===
+Customer ID: CUST-12345    Order ID: ORD-67890
+Order Date: 2025-01-15     Order Amount: $89.99
+Issue: Damaged item on delivery
+Customer Request: Full refund    Status: Pending manager approval
+===</code></pre>
+          </div>
+          <div class="callout exam">
+            <div class="co-title">Why not just tune summarisation?</div>
+            <p>Summarisation inherently loses precise numbers, dates, and percentages. Raising a threshold or "asking it to preserve numbers" is fragile. A structured facts block guarantees the data survives regardless of how much history is compressed (practice Q54).</p>
+          </div>
+
+          <h2><span class="h2-num">11.2</span>Trim tool results &amp; position-aware input</h2>
+          <p>If <code>lookup_order</code> returns 40+ fields but you need 5, a <code>PostToolUse</code> hook keeps only what matters — conserving context and reducing noise. And because of lost-in-the-middle, structure aggregated input deliberately:</p>
+          <div class="code">
+            <div class="code-head"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span><span class="code-file">positioned_input.txt</span><span class="code-lang">text</span></div>
+            <pre data-lang="text"><code>[KEY FINDINGS — at the top]      Found 3 critical vulnerabilities...
+[DETAILED RESULTS — middle]      === auth.ts === ...  === db.ts === ...
+[ACTION ITEMS — at the end]      Priority: fix auth.ts before merge.</code></pre>
+          </div>
+          <p>A key-findings summary at the start (primacy) plus explicit section headings throughout directly mitigates the missed-middle problem (practice Q13).</p>
+
+          <h2><span class="h2-num">11.3</span>Scratchpads, subagent delegation &amp; state persistence</h2>
+          <p>In long investigations, write key findings to a <strong>scratchpad file</strong> — when context degrades or a new session starts, the agent consults it instead of re-discovering. <strong>Delegate</strong> verbose discovery to a subagent (Explore) that reads 15 files and returns one line, so the main agent keeps a clean window. Give subagents minimal context, a constrained <code>allowed_tools</code>, and ask for structured results — not raw dumps. For crash recovery, each agent exports its state to a known location and the coordinator loads a manifest on resume.</p>
+          <div class="figure">
+            <svg viewBox="0 0 760 130" role="img" aria-label="Subagent protects context">
+              <rect class="dg-node-clay" x="30" y="35" width="200" height="60" rx="10"/><text class="dg-label" x="130" y="60" text-anchor="middle">Main agent</text><text class="dg-sub" x="130" y="80" text-anchor="middle">keeps 1 line</text>
+              <rect class="dg-node-blue" x="290" y="20" width="200" height="90" rx="10"/><text class="dg-label" x="390" y="48" text-anchor="middle">Explore subagent</text><text class="dg-sub" x="390" y="70" text-anchor="middle">reads 15 files</text><text class="dg-sub" x="390" y="88" text-anchor="middle">traces imports</text>
+              <rect class="dg-node" x="555" y="35" width="180" height="60" rx="10"/><text class="dg-sub" x="645" y="60" text-anchor="middle">"depends on</text><text class="dg-sub" x="645" y="78" text-anchor="middle">Auth, Order, Gateway"</text>
+              <line class="dg-edge-clay" x1="230" y1="65" x2="286" y2="65" marker-end="url(#ar11)"/>
+              <line class="dg-edge-blue" x1="490" y1="65" x2="551" y2="65" marker-end="url(#ar11b)"/>
+              <defs><marker id="ar11" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path class="dg-arrow-clay" d="M0,0 L9,4.5 L0,9 z"/></marker><marker id="ar11b" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path class="dg-arrow-blue" d="M0,0 L9,4.5 L0,9 z"/></marker></defs>
+            </svg>
+            <div class="figcap">The subagent absorbs 15 files of noise and returns a one-line summary — the main context stays clean.</div>
+          </div>
+
+          <div class="takeaways">
+            <h3>Key takeaways</h3>
+            <ul>
+              <li>Persist critical facts in a structured block outside summarised history.</li>
+              <li>Trim verbose tool output (PostToolUse hook) to relevant fields.</li>
+              <li>Position key findings at the start; use section headings to beat lost-in-the-middle.</li>
+              <li>Use scratchpads, subagent delegation, and exported state for long/large investigations.</li>
+            </ul>
+          </div>
+
+          <div class="quiz" data-quiz="ch11">
+            <div class="quiz-head"><span class="quiz-badge">Quiz</span><h3>Check yourself · Chapter 11</h3></div>
+            <div class="quiz-sub">Three questions on context management.</div>
+            <div class="q">
+              <div class="q-text"><span class="qn">Q1</span> Customers reference exact amounts from 20+ turns ago, but summarisation condensed them to "promotional pricing was discussed." Best fix?</div>
+              <div class="opts">
+                <button class="opt">Raise the summarisation threshold from 70% to 85%.</button>
+                <button class="opt">Store full history externally and retrieve on "as I mentioned".</button>
+                <button class="opt" data-correct>Extract transactional facts into a persistent "case facts" block in every prompt.</button>
+                <button class="opt">Revise the summariser to preserve all numbers verbatim.</button>
+              </div>
+              <div class="q-explain"><b>Correct: C.</b> Summarisation inherently loses precision; a structured facts block outside the summarised history guarantees the data is always present.</div>
+            </div>
+            <div class="q">
+              <div class="q-text"><span class="qn">Q2</span> A synthesis agent reliably cites the first and last chunks of a 75K-token input but misses the middle. Restructure how?</div>
+              <div class="opts">
+                <button class="opt">Summarise everything under 20K tokens first.</button>
+                <button class="opt">Stream results incrementally.</button>
+                <button class="opt" data-correct>Put a key-findings summary at the start and add explicit section headings throughout.</button>
+                <button class="opt">Rotate which agent's results appear first.</button>
+              </div>
+              <div class="q-explain"><b>Correct: C.</b> Primacy placement + navigational headings directly mitigate lost-in-the-middle without discarding content.</div>
+            </div>
+            <div class="q">
+              <div class="q-text"><span class="qn">Q3</span> Phase 1 discovery dumps hundreds of call sites and fills the window before later phases. Best approach?</div>
+              <div class="opts">
+                <button class="opt" data-correct>Use an Explore subagent for discovery; it returns a summary, keeping the main context for design + implementation.</button>
+                <button class="opt">Use <code>/compact</code> periodically in the main conversation.</button>
+                <button class="opt">Switch to headless mode with <code>--continue</code>.</button>
+                <button class="opt">Put the pattern in CLAUDE.md and process in batches.</button>
+              </div>
+              <div class="q-explain"><b>Correct: A.</b> The Explore subagent isolates verbose discovery and returns a concise summary, preserving the main window for the phases that need retained context.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== CHAPTER 12 ==================== -->
+      <section class="page" id="page-ch12">
+        <div class="wrap">
+          <div class="page-head">
+            <div class="eyebrow">Chapter 12 · Provenance</div>
+            <h1 class="title">Preserving <em>Provenance</em></h1>
+            <p class="lede">Keep the claim-to-source link alive through synthesis, and handle conflicting data by annotating — never by silently picking a winner.</p>
+          </div>
+
+          <h2><span class="h2-num">12.1</span>Don't lose attribution</h2>
+          <div class="compare">
+            <div class="card bad">
+              <h4>✗ Attribution lost</h4>
+              <p>"The AI music market is estimated at $3.2B." — no source, no year.</p>
+            </div>
+            <div class="card good">
+              <h4>✓ Provenance preserved</h4>
+              <p><code>{claim, source_url, source_name, publication_date, confidence}</code> — the claim travels with its evidence.</p>
+            </div>
+          </div>
+          <p>Require subagents to output claim → source mappings (URL, document name, quotes) so attribution survives aggregation.</p>
+
+          <h2><span class="h2-num">12.2</span>Conflicting data &amp; dates</h2>
+          <p>When two credible sources disagree, <strong>preserve both</strong> with attribution and let the coordinator reconcile — don't arbitrarily pick one:</p>
+          <div class="code">
+            <div class="code-head"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span><span class="code-file">conflict.json</span><span class="code-lang">json</span></div>
+            <pre data-lang="json"><code>{
+  "claim": "Share of AI-generated music on streaming",
+  "values": [
+    {"value": "12%", "source": "Spotify Report 2024", "date": "2024-03"},
+    {"value": "8%",  "source": "Industry Survey",      "date": "2024-07"}
+  ],
+  "conflict_detected": true,
+  "possible_explanation": "Different methodology and time period"
+}</code></pre>
+          </div>
+          <p>Always include dates — without them, temporal differences get misread as contradictions ("A says 10%, B says 15%" vs. "A (2023) 10%, B (2024) 15% — likely +5% growth"). And render by content type: financial data → tables, news → prose, technical findings → lists, time series → chronological.</p>
+
+          <div class="takeaways">
+            <h3>Key takeaways</h3>
+            <ul>
+              <li>Preserve claim → source → date through synthesis; require structured citations from subagents.</li>
+              <li>On conflict, keep both values with attribution and let the coordinator reconcile.</li>
+              <li>Dates prevent misreading temporal change as contradiction.</li>
+              <li>Render by content type rather than forcing one format.</li>
+            </ul>
+          </div>
+
+          <div class="quiz" data-quiz="ch12">
+            <div class="quiz-head"><span class="quiz-badge">Quiz</span><h3>Check yourself · Chapter 12</h3></div>
+            <div class="quiz-sub">Two questions on provenance.</div>
+            <div class="q">
+              <div class="q-text"><span class="qn">Q1</span> Two credible sources give 40% vs. 12% for a key metric. How should the analysis agent handle it?</div>
+              <div class="opts">
+                <button class="opt">Apply credibility heuristics, pick one, add a footnote.</button>
+                <button class="opt">Include both without marking them as conflicting.</button>
+                <button class="opt">Stop and escalate to the coordinator to choose before continuing.</button>
+                <button class="opt" data-correct>Complete analysis with both, annotate the conflict with attribution, and let the coordinator reconcile.</button>
+              </div>
+              <div class="q-explain"><b>Correct: D.</b> Preserve separation of responsibilities: finish the work without blocking, keep both values attributed, and pass reconciliation to the coordinator, which has broader context.</div>
+            </div>
+            <div class="q">
+              <div class="q-text"><span class="qn">Q2</span> Why include publication dates with every extracted statistic?</div>
+              <div class="opts">
+                <button class="opt">To satisfy JSON schema requirements.</button>
+                <button class="opt" data-correct>So temporal differences aren't misread as contradictions.</button>
+                <button class="opt">Dates let you delete older sources automatically.</button>
+                <button class="opt">They're required for batch correlation.</button>
+              </div>
+              <div class="q-explain"><b>Correct: B.</b> "10% vs 15%" looks like a conflict until dates reveal it's a year of growth. Dates enable correct interpretation.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== CHAPTER 13 ==================== -->
+      <section class="page" id="page-ch13">
+        <div class="wrap">
+          <div class="page-head">
+            <div class="eyebrow">Chapter 13 · Built-in Tools</div>
+            <h1 class="title">Claude Code <em>Built-in Tools</em></h1>
+            <p class="lede">Six tools, each with a clear job. Knowing which to reach for — and the Edit → Read+Write fallback — closes out Domain 2.</p>
+          </div>
+
+          <h2><span class="h2-num">13.1</span>Tool selection reference</h2>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Task</th><th>Tool</th><th>Example</th></tr></thead>
+              <tbody>
+                <tr><td>Find files by name/pattern</td><td><code>Glob</code></td><td><code>**/*.test.tsx</code></td></tr>
+                <tr><td>Search <em>within</em> files</td><td><code>Grep</code></td><td>function name, error message, import</td></tr>
+                <tr><td>Read a file in full</td><td><code>Read</code></td><td>load for analysis</td></tr>
+                <tr><td>Create a new file</td><td><code>Write</code></td><td>from scratch</td></tr>
+                <tr><td>Edit precisely</td><td><code>Edit</code></td><td>replace a unique text match</td></tr>
+                <tr><td>Run a shell command</td><td><code>Bash</code></td><td>git, npm, tests, build</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout exam">
+            <div class="co-title">Grep vs. Glob</div>
+            <p>The frequent confusion: <strong>Glob</strong> finds files by <em>name/pattern</em>; <strong>Grep</strong> searches file <em>contents</em>. "Find all functions named X" → Grep. "Find all <code>.test.tsx</code> files" → Glob.</p>
+          </div>
+
+          <h2><span class="h2-num">13.2</span>Incremental investigation &amp; the Edit fallback</h2>
+          <p>Don't read everything at once. Build understanding incrementally: Grep for entry points → Read the matches → Grep for usages → Read consumers → repeat. When <code>Edit</code> fails on a non-unique match, fall back to <strong>Read → modify → Write</strong> the whole file.</p>
+          <div class="figure">
+            <svg viewBox="0 0 760 90" role="img" aria-label="Incremental investigation loop">
+              <rect class="dg-node-blue" x="20" y="25" width="150" height="44" rx="9"/><text class="dg-label" x="95" y="52" text-anchor="middle">Grep entry pts</text>
+              <rect class="dg-node-clay" x="200" y="25" width="120" height="44" rx="9"/><text class="dg-label" x="260" y="52" text-anchor="middle">Read</text>
+              <rect class="dg-node-blue" x="350" y="25" width="150" height="44" rx="9"/><text class="dg-label" x="425" y="52" text-anchor="middle">Grep usages</text>
+              <rect class="dg-node-clay" x="530" y="25" width="120" height="44" rx="9"/><text class="dg-label" x="590" y="52" text-anchor="middle">Read consumers</text>
+              <text class="dg-sub" x="700" y="52">↻</text>
+              <line class="dg-edge" x1="170" y1="47" x2="196" y2="47" marker-end="url(#ar13)"/>
+              <line class="dg-edge" x1="320" y1="47" x2="346" y2="47" marker-end="url(#ar13)"/>
+              <line class="dg-edge" x1="500" y1="47" x2="526" y2="47" marker-end="url(#ar13)"/>
+              <defs><marker id="ar13" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path class="dg-arrow" d="M0,0 L9,4.5 L0,9 z"/></marker></defs>
+            </svg>
+            <div class="figcap">Grep → Read → Grep → Read. Trace the code, don't ingest it all.</div>
+          </div>
+
+          <div class="takeaways">
+            <h3>Key takeaways</h3>
+            <ul>
+              <li>Glob = find files by pattern; Grep = search contents; Edit = precise unique-match replace.</li>
+              <li>Investigate incrementally (Grep → Read → Grep → Read) rather than reading everything.</li>
+              <li>Edit fails on non-unique matches → fall back to Read + Write.</li>
+            </ul>
+          </div>
+
+          <div class="quiz" data-quiz="ch13">
+            <div class="quiz-head"><span class="quiz-badge">Quiz</span><h3>Check yourself · Chapter 13</h3></div>
+            <div class="quiz-sub">Two questions on built-in tools.</div>
+            <div class="q">
+              <div class="q-text"><span class="qn">Q1</span> You want to find every place a function named <code>processRefund</code> is called. Which tool?</div>
+              <div class="opts">
+                <button class="opt">Glob</button>
+                <button class="opt" data-correct>Grep</button>
+                <button class="opt">Read every file</button>
+                <button class="opt">Bash <code>ls</code></button>
+              </div>
+              <div class="q-explain"><b>Correct: B.</b> Grep searches file <em>contents</em> for symbols, imports, and call sites. Glob only matches file names/patterns.</div>
+            </div>
+            <div class="q">
+              <div class="q-text"><span class="qn">Q2</span> <code>Edit</code> fails because the target snippet appears multiple times. Best fallback?</div>
+              <div class="opts">
+                <button class="opt">Delete the file and recreate it.</button>
+                <button class="opt" data-correct>Read the full file, modify the content, and Write it back.</button>
+                <button class="opt">Use Glob to locate a unique line.</button>
+                <button class="opt">Run a Bash sed command blindly.</button>
+              </div>
+              <div class="q-explain"><b>Correct: B.</b> When a unique match isn't possible, Read + Write the whole file is the documented fallback.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CHAPTERS-INSERT -->
+
+      <!-- ==================== EXAM SIMULATOR ==================== -->
+      <section class="page" id="page-exam">
+        <div class="wrap-wide">
+
+          <!-- INTRO VIEW -->
+          <div id="examIntro">
+            <div class="page-head">
+              <div class="eyebrow blue">Part II · Certify</div>
+              <h1 class="title">The Exam <em>Simulator</em></h1>
+              <p class="lede">Every worked example and practice question from the guide — 88 in all — answerable right here. Choose a mode, pick your scenarios, and sit the test.</p>
+            </div>
+
+            <div class="exam-stats">
+              <div class="stat"><div class="num" id="statTotal">88</div><div class="lbl">questions</div></div>
+              <div class="stat"><div class="num">5</div><div class="lbl">scenarios</div></div>
+              <div class="stat"><div class="num">720</div><div class="lbl">pass mark*</div></div>
+              <div class="stat"><div class="num">4 / 4</div><div class="lbl">always answer</div></div>
+            </div>
+            <p style="font-size:13px;color:var(--muted);margin-top:-6px">*The real exam scores 100–1000 with a 720 pass. Here we show a simple percent; ~72% is your rough target.</p>
+
+            <h2>Choose a mode</h2>
+            <div class="mode-grid">
+              <div class="mode-card" data-mode="study">
+                <div class="mode-ico"><svg viewBox="0 0 24 24" width="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2zM22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg></div>
+                <h3>Study mode</h3>
+                <p>Immediate feedback after each answer, with the full explanation. Best for learning — no time pressure, jump around freely.</p>
+              </div>
+              <div class="mode-card blue" data-mode="exam">
+                <div class="mode-ico"><svg viewBox="0 0 24 24" width="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21 8 14 2 9.4h7.6z"/></svg></div>
+                <h3>Exam mode</h3>
+                <p>Answer the whole set, then get a score with a domain-style breakdown and a question-by-question review. Closest to the real thing.</p>
+              </div>
+            </div>
+
+            <h2>Filter by scenario</h2>
+            <p>Leave "All" selected for a full run, or focus on one scenario at a time.</p>
+            <div class="filter-bar" id="scenarioChips"></div>
+
+            <div class="filter-bar" style="margin-top:8px">
+              <label style="display:flex;align-items:center;gap:9px;font-size:14px;color:var(--text-dim);cursor:pointer">
+                <input type="checkbox" id="shuffleToggle" style="width:16px;height:16px;accent-color:var(--clay)">
+                Shuffle question order
+              </label>
+            </div>
+
+            <div style="margin-top:26px;display:flex;gap:12px;flex-wrap:wrap">
+              <button class="btn btn-blue" id="startExamBtn" style="font-size:15px;padding:11px 24px">Start &nbsp;→</button>
+              <span id="startSummary" style="align-self:center;font-family:var(--mono);font-size:13px;color:var(--muted)"></span>
+            </div>
+          </div>
+
+          <!-- RUNNER VIEW -->
+          <div id="examRunner" style="display:none">
+            <div class="exam-card">
+              <div class="exam-meta">
+                <span class="exam-scenario" id="exScenario">Scenario</span>
+                <span class="exam-tag" id="exTag" style="display:none">Worked example</span>
+                <span class="exam-count" id="exCount">1 / 88</span>
+                <span style="margin-left:auto;font-family:var(--mono);font-size:12.5px;color:var(--muted)">
+                  Score: <b id="exScore" style="color:var(--clay)">0</b>
+                </span>
+              </div>
+              <div class="exam-situation" id="exSituation"></div>
+              <div class="exam-prompt" id="exPrompt"></div>
+              <div class="opts" id="exOpts"></div>
+              <div class="q-explain" id="exExplain"></div>
+
+              <div class="exam-bar">
+                <button class="btn" id="exPrev">← Prev</button>
+                <div class="exam-progress-track"><div class="exam-progress-fill" id="exProgress"></div></div>
+                <button class="btn btn-blue" id="exNext">Next →</button>
+              </div>
+              <div style="text-align:center;margin-top:18px">
+                <button class="btn" id="exQuit" style="font-size:12.5px;padding:6px 14px">Exit to menu</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- RESULT VIEW -->
+          <div id="examResult" style="display:none">
+            <div class="result">
+              <div class="eyebrow blue" style="justify-content:center">Results</div>
+              <div class="score-ring">
+                <svg width="220" height="220" viewBox="0 0 220 220">
+                  <circle class="ring-bg" cx="110" cy="110" r="92"/>
+                  <circle class="ring-fg" id="ringFg" cx="110" cy="110" r="92" stroke="#859900" stroke-dasharray="578" stroke-dashoffset="578"/>
+                </svg>
+                <div class="score-center">
+                  <div class="pct" id="resPct">0%</div>
+                  <div class="verdict" id="resVerdict">—</div>
+                </div>
+              </div>
+              <div class="result-bd">
+                <div class="stat"><div class="num g" id="resCorrect">0</div><div class="lbl">correct</div></div>
+                <div class="stat"><div class="num r" id="resWrong">0</div><div class="lbl">incorrect</div></div>
+                <div class="stat"><div class="num" id="resTotalQ">0</div><div class="lbl">total</div></div>
+              </div>
+
+              <div class="domain-bars" id="scenarioBreakdown"></div>
+
+              <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:24px">
+                <button class="btn btn-blue" id="reviewBtn">Review answers</button>
+                <button class="btn btn-primary" id="retryBtn">Try again</button>
+                <button class="btn" id="backMenuBtn">Back to menu</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- EXAM-INSERT -->
+
+    </main>
+  </div>
+</div>
+
+<script src="tutorial-assets/questions.js"></script>
+<script src="tutorial-assets/app.js"></script>
+</body>
+</html>
