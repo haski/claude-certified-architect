@@ -135,9 +135,11 @@
     const questions = $$('.q', quiz);
     const saved = quizState[chId] || {};
     let answered = 0;
+    const refs = [];
     questions.forEach((q, qi) => {
       const opts = $$('.opt', q);
       const explain = $('.q-explain', q);
+      refs.push({ q: q, opts: opts, explain: explain });
       // prepend option key letters A B C D
       opts.forEach((o, i) => {
         const k = document.createElement('span');
@@ -164,6 +166,35 @@
         });
       });
     });
+
+    // "Reset answers" button for this chapter's quiz
+    const head = $('.quiz-head', quiz);
+    if (head) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'btn quiz-reset';
+      btn.style.cssText = 'margin-left:auto;font-size:12px;padding:5px 11px';
+      btn.innerHTML = '&#8634; Reset answers';
+      btn.addEventListener('click', () => {
+        refs.forEach(r => {
+          delete r.q.dataset.locked;
+          r.opts.forEach(o => {
+            o.classList.remove('locked', 'correct', 'wrong');
+            const m = $('.opt-mark', o);
+            if (m) m.remove();
+          });
+          r.explain.classList.remove('show');
+        });
+        answered = 0;
+        if (quizState[chId]) { delete quizState[chId]; store.set('quiz', quizState); }
+        if (doneChapters.has(chId)) {
+          doneChapters.delete(chId);
+          store.set('done', Array.from(doneChapters));
+          refreshProgress();
+        }
+      });
+      head.appendChild(btn);
+    }
   });
   refreshProgress();
 
