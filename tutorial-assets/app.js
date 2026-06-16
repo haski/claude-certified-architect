@@ -533,6 +533,56 @@
   function escapeHtml(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 
   /* ---------------------------------------------------------------------
+     UPDATE CHECK (option B)
+     Compare the browser's CACHED version.json against the LIVE one. If they
+     differ, a newer build was deployed -> show a non-blocking "Refresh" toast.
+     The no-store fetch always hits the network, so detection bypasses the
+     cache; the force-cache fetch returns whatever the browser already has.
+     To release an update to existing visitors, bump "version" in version.json.
+     Skipped on file:// (no real HTTP caching there).
+  --------------------------------------------------------------------- */
+  function showUpdateBanner(ver) {
+    if ($('#updateBanner')) return;
+    const bar = document.createElement('div');
+    bar.id = 'updateBanner';
+    bar.style.cssText =
+      'position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:9999;' +
+      'display:flex;align-items:center;gap:14px;padding:11px 16px;border-radius:8px;' +
+      'background:var(--base02,#073642);color:var(--base3,#fdf6e3);font-family:var(--mono,monospace);' +
+      'font-size:13px;box-shadow:0 10px 34px -10px rgba(0,0,0,.45);border:1px solid var(--base01,#586e75);' +
+      'max-width:calc(100vw - 32px)';
+    const msg = document.createElement('span');
+    msg.innerHTML = '&#10037;&nbsp; A new version of the tutorial is available.';
+    const refresh = document.createElement('button');
+    refresh.textContent = 'Refresh';
+    refresh.style.cssText =
+      'font:600 12px var(--mono,monospace);padding:6px 13px;border-radius:5px;border:none;' +
+      'background:var(--orange,#cb4b16);color:var(--base3,#fdf6e3);cursor:pointer';
+    refresh.addEventListener('click', () => location.reload());
+    const later = document.createElement('button');
+    later.textContent = 'Later';
+    later.style.cssText =
+      'font:12px var(--mono,monospace);padding:6px 11px;border-radius:5px;background:transparent;' +
+      'border:1px solid var(--base01,#586e75);color:var(--base3,#fdf6e3);cursor:pointer';
+    later.addEventListener('click', () => { store.set('updDismissed', ver); bar.remove(); });
+    bar.appendChild(msg); bar.appendChild(refresh); bar.appendChild(later);
+    document.body.appendChild(bar);
+  }
+
+  (function checkForUpdate() {
+    if (location.protocol === 'file:') return;
+    const getVer = mode => fetch('version.json', { cache: mode })
+      .then(r => (r.ok ? r.json() : null))
+      .then(d => (d && d.version) || null)
+      .catch(() => null);
+    Promise.all([getVer('force-cache'), getVer('no-store')]).then(([cached, live]) => {
+      if (!cached || !live || cached === live) return;         // up to date or undeterminable
+      if (store.get('updDismissed', null) === live) return;    // already dismissed this version
+      showUpdateBanner(live);
+    });
+  })();
+
+  /* ---------------------------------------------------------------------
      BOOT
   --------------------------------------------------------------------- */
   const startId = (location.hash || '').replace('#', '');
