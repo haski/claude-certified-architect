@@ -100,6 +100,7 @@
   --------------------------------------------------------------------- */
   const TOTAL_CHAPTERS = 13;
   let doneChapters = new Set(store.get('done', []));
+  let quizState = store.get('quiz', {});   // { chId: { questionIndex: chosenOptionIndex } }
 
   function refreshProgress() {
     const pct = Math.round((doneChapters.size / TOTAL_CHAPTERS) * 100);
@@ -111,32 +112,49 @@
     }
   }
 
+  // Apply the answered/locked visual state to a quiz question (used live + on restore)
+  function lockQuizQuestion(q, opts, explain, chosenIdx) {
+    q.dataset.locked = '1';
+    opts.forEach((o, oi) => {
+      o.classList.add('locked');
+      const isCorrect = o.hasAttribute('data-correct');
+      if (isCorrect) o.classList.add('correct');
+      if (oi === chosenIdx && !isCorrect) o.classList.add('wrong');
+      if (!$('.opt-mark', o)) {
+        const m = document.createElement('span');
+        m.className = 'opt-mark';
+        m.textContent = isCorrect ? '✓' : (oi === chosenIdx ? '✗' : '');
+        o.appendChild(m);
+      }
+    });
+    explain.classList.add('show');
+  }
+
   $$('.quiz').forEach(quiz => {
     const chId = quiz.dataset.quiz;
     const questions = $$('.q', quiz);
+    const saved = quizState[chId] || {};
     let answered = 0;
-    questions.forEach(q => {
+    questions.forEach((q, qi) => {
       const opts = $$('.opt', q);
       const explain = $('.q-explain', q);
-      opts.forEach(opt => {
+      // prepend option key letters A B C D
+      opts.forEach((o, i) => {
+        const k = document.createElement('span');
+        k.className = 'opt-key';
+        k.textContent = 'ABCD'[i];
+        o.insertBefore(k, o.firstChild);
+      });
+      // restore a previously saved selection
+      if (saved[qi] !== undefined) { lockQuizQuestion(q, opts, explain, saved[qi]); answered++; }
+      // wire clicks
+      opts.forEach((opt, oi) => {
         opt.addEventListener('click', () => {
           if (q.dataset.locked) return;
-          q.dataset.locked = '1';
-          const correct = opt.hasAttribute('data-correct');
-          opt.classList.add('locked', correct ? 'correct' : 'wrong');
-          // reveal the correct one if user was wrong
-          opts.forEach(o => {
-            o.classList.add('locked');
-            if (o.hasAttribute('data-correct')) o.classList.add('correct');
-            // add a small marker
-            if (!$('.opt-mark', o)) {
-              const m = document.createElement('span');
-              m.className = 'opt-mark';
-              m.textContent = o.hasAttribute('data-correct') ? '✓' : (o === opt ? '✗' : '');
-              o.appendChild(m);
-            }
-          });
-          explain.classList.add('show');
+          lockQuizQuestion(q, opts, explain, oi);
+          quizState[chId] = quizState[chId] || {};
+          quizState[chId][qi] = oi;
+          store.set('quiz', quizState);
           answered++;
           if (answered === questions.length && !doneChapters.has(chId)) {
             doneChapters.add(chId);
@@ -144,13 +162,6 @@
             refreshProgress();
           }
         });
-      });
-      // prepend option key letters A B C D
-      opts.forEach((o, i) => {
-        const k = document.createElement('span');
-        k.className = 'opt-key';
-        k.textContent = 'ABCD'[i];
-        o.insertBefore(k, o.firstChild);
       });
     });
   });
@@ -193,13 +204,34 @@
       'Conversational AI': '#b58900'
     };
 
-    let mode = 'study';          // 'study' | 'exam'
+    let mode = store.get('exMode', 'study');   // 'study' | 'exam'
     let selScenario = 'all';
     let shuffle = false;
     let queue = [];              // current question objects
     let idx = 0;
     let answers = {};            // id -> chosen index
     let reviewing = false;
+
+    // ---- persistence: save/restore the current (or last) exam run ----
+    function saveRun(finished) {
+      store.set('examRun', {
+        mode: mode, scenario: selScenario, shuffle: shuffle,
+        queueIds: queue.map(q => q.id), idx: idx, answers: answers,
+        finished: !!finished, ts: Date.now()
+      });
+    }
+    function loadRun() { return store.get('examRun', null); }
+    function restoreRun(run, toResult) {
+      mode = run.mode; selScenario = run.scenario; shuffle = !!run.shuffle;
+      queue = (run.queueIds || []).map(id => ALL.find(q => q.id === id)).filter(Boolean);
+      if (!queue.length) return;
+      answers = run.answers || {};
+      idx = Math.min(run.idx || 0, queue.length - 1);
+      reviewing = false;
+      $('#examIntro').style.display = 'none';
+      if (toResult) { $('#examRunner').style.display = 'none'; showResult(); }
+      else { $('#examResult').style.display = 'none'; $('#examRunner').style.display = ''; render(); }
+    }
 
     function shuffleArr(a) {
       const r = a.slice();
@@ -241,12 +273,83 @@
       buildChips();
       $$('.mode-card').forEach(c => c.style.outline = c.dataset.mode === mode ? '2px solid var(--clay)' : 'none');
       updateSummary();
+      renderResumeBanner();
+      ensureResetLink();
+    }
+
+    // Banner at the top of the intro: resume an in-progress run, or review the last result.
+    function renderResumeBanner() {
+      let host = $('#examResume');
+      if (!host) {
+        host = document.createElement('div');
+        host.id = 'examResume';
+        host.style.margin = '22px 0 6px';
+        const intro = $('#examIntro');
+        const head = $('.page-head', intro);
+        if (head && head.nextSibling) intro.insertBefore(host, head.nextSibling);
+        else intro.insertBefore(host, intro.firstChild);
+      }
+      const run = loadRun();
+      if (!run || !run.queueIds || !run.queueIds.length) { host.style.display = 'none'; host.innerHTML = ''; return; }
+      host.style.display = '';
+      const total = run.queueIds.length;
+      const ans = run.answers || {};
+      const answered = Object.keys(ans).length;
+      const correct = run.queueIds.filter(id => { const q = ALL.find(x => x.id === id); return q && ans[id] === q.correct; }).length;
+      const pct = total ? Math.round(correct / total * 100) : 0;
+      const scn = run.scenario === 'all' ? 'All scenarios' : run.scenario;
+
+      const box = document.createElement('div');
+      box.className = 'callout note';
+      box.style.display = 'flex';
+      box.style.flexWrap = 'wrap';
+      box.style.alignItems = 'center';
+      box.style.justifyContent = 'space-between';
+      box.style.gap = '12px';
+      box.innerHTML = run.finished
+        ? '<div><div class="co-title">Last result saved</div><div style="font-size:14px"><b>' + pct + '%</b> · ' + correct + '/' + total + ' correct · ' + run.mode + ' mode · ' + scn + '</div></div>'
+        : '<div><div class="co-title">Run in progress</div><div style="font-size:14px">answered ' + answered + '/' + total + ' · ' + run.mode + ' mode · ' + scn + '</div></div>';
+
+      const btns = document.createElement('div');
+      btns.style.cssText = 'display:flex;gap:8px;flex-wrap:wrap';
+      btns.innerHTML = run.finished
+        ? '<button class="btn btn-blue" data-act="review">Review answers</button><button class="btn" data-act="retake">Retake</button><button class="btn" data-act="clear">Clear</button>'
+        : '<button class="btn btn-blue" data-act="resume">Resume</button><button class="btn" data-act="clear">Discard</button>';
+      box.appendChild(btns);
+      host.innerHTML = '';
+      host.appendChild(box);
+
+      btns.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+        const act = b.dataset.act;
+        if (act === 'clear') { store.set('examRun', null); renderResumeBanner(); }
+        else if (act === 'review') restoreRun(run, true);
+        else if (act === 'resume') restoreRun(run, false);
+        else if (act === 'retake') { mode = run.mode; selScenario = run.scenario; shuffle = !!run.shuffle; start(); }
+      }));
+    }
+
+    // A subtle "reset everything" link at the bottom of the intro.
+    function ensureResetLink() {
+      if ($('#examReset')) return;
+      const r = document.createElement('div');
+      r.id = 'examReset';
+      r.style.cssText = 'margin-top:28px;font-size:12.5px';
+      r.innerHTML = '<a href="#" style="color:var(--muted)">Reset all saved progress — chapter quizzes &amp; exam results</a>';
+      $('#examIntro').appendChild(r);
+      r.querySelector('a').addEventListener('click', e => {
+        e.preventDefault();
+        if (window.confirm('Clear all saved progress? This erases your chapter quiz answers and exam results on this device.')) {
+          ['done', 'quiz', 'examRun', 'last'].forEach(k => store.set(k, null));
+          location.reload();
+        }
+      });
     }
 
     function start() {
       queue = currentSet();
       if (!queue.length) return;
       idx = 0; answers = {}; reviewing = false;
+      saveRun(false);
       $('#examIntro').style.display = 'none';
       $('#examResult').style.display = 'none';
       $('#examRunner').style.display = '';
@@ -311,6 +414,7 @@
       if (reviewing) return;
       if (mode === 'study' && answers[q.id] !== undefined) return; // locked
       answers[q.id] = i;
+      saveRun(false);
       if (mode === 'study') render();      // reveal immediately
       else {                                // exam: just mark selection
         $('#exScore').textContent = score();
@@ -328,6 +432,7 @@
     function prev() { if (idx > 0) { idx--; render(); } }
 
     function showResult() {
+      saveRun(true);
       $('#examRunner').style.display = 'none';
       $('#examResult').style.display = '';
       const correct = score(), total = queue.length;
@@ -378,6 +483,7 @@
     // wire up controls
     $$('.mode-card').forEach(c => c.addEventListener('click', () => {
       mode = c.dataset.mode;
+      store.set('exMode', mode);
       $$('.mode-card').forEach(x => x.style.outline = x === c ? '2px solid var(--clay)' : 'none');
       updateSummary();
     }));
