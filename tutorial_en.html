@@ -238,8 +238,8 @@
 
           <p class="chapter-lede">The Claude API is <strong>stateless</strong>. Each request is independent; the model has no server-side memory of prior turns. To hold a conversation, <em>you</em> resend the full history every time.</p>
 
-          <h2><span class="h2-num">1.1</span>The shape of a request</h2>
-          <p>Every call to the Messages API is a JSON object. These fields recur throughout the exam:</p>
+          <h2><span class="h2-num">1.1</span>API request structure</h2>
+          <p>The Claude API follows a <strong>request–response</strong> model: you send one JSON object to the Messages API and get one response back. There is no hidden session on the server — everything the model knows about the conversation lives inside the request you just sent. Every call to the Messages API looks like this:</p>
           <div class="code">
             <div class="code-head"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span><span class="code-file">messages.request.json</span><span class="code-lang">json</span></div>
             <pre data-lang="json"><code>{
@@ -255,42 +255,68 @@
   "tool_choice": {"type": "auto"}
 }</code></pre>
           </div>
+          <p>These six fields recur throughout the exam, so know exactly what each one does:</p>
           <div class="tbl-wrap">
             <table>
-              <thead><tr><th>Field</th><th>Role</th></tr></thead>
+              <thead><tr><th>Field</th><th>What it does</th></tr></thead>
               <tbody>
-                <tr><td><code>model</code></td><td>Which model — e.g. <code>claude-opus-4-6</code>, <code>claude-sonnet-4-6</code>, <code>claude-haiku-4-5</code></td></tr>
-                <tr><td><code>max_tokens</code></td><td>Maximum tokens in the response (not the context limit)</td></tr>
-                <tr><td><code>system</code></td><td>The system prompt — behaviour, role, constraints. Passed <em>separately</em>, not inside <code>messages</code></td></tr>
-                <tr><td><code>messages</code></td><td>The full conversation history — you must resend it every call</td></tr>
-                <tr><td><code>tools</code></td><td>Definitions of callable tools</td></tr>
-                <tr><td><code>tool_choice</code></td><td>Tool-selection strategy (Chapter 2)</td></tr>
+                <tr><td><code>model</code></td><td>Which model to use — <code>claude-opus-4-6</code> (most capable), <code>claude-sonnet-4-6</code> (balanced), <code>claude-haiku-4-5</code> (fastest/cheapest)</td></tr>
+                <tr><td><code>max_tokens</code></td><td>Maximum tokens in the <em>response</em>. This is an output cap — <strong>not</strong> the context-window limit. If the model hits it, the reply is truncated.</td></tr>
+                <tr><td><code>system</code></td><td>The system prompt — defines behaviour, role, and constraints. Passed <em>separately</em>, not inside <code>messages</code> (see 1.4)</td></tr>
+                <tr><td><code>messages</code></td><td>The conversation history. You must send the <strong>full history</strong> every call to maintain coherence</td></tr>
+                <tr><td><code>tools</code></td><td>Definitions of the tools the model may call (Chapter 2)</td></tr>
+                <tr><td><code>tool_choice</code></td><td>The tool-selection strategy — <code>auto</code>, <code>any</code>, or a forced tool (Chapter 2)</td></tr>
               </tbody>
             </table>
           </div>
+          <p>A message's <code>content</code> can be a plain string (as above) or a list of typed <strong>content blocks</strong> — <code>text</code>, <code>tool_use</code>, and <code>tool_result</code>. That block structure is what makes tool calling work, and it shapes how the three roles fit together next.</p>
 
-          <h2><span class="h2-num">1.2</span>Statelessness, visualised</h2>
-          <p>Because nothing persists, a "conversation" is really a growing transcript you carry forward. This single fact explains a cluster of exam answers about lost memory and rising cost.</p>
+          <h2><span class="h2-num">1.2</span>Message roles &amp; statelessness</h2>
+          <p>The <code>messages</code> array uses three roles:</p>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Role</th><th>What it carries</th></tr></thead>
+              <tbody>
+                <tr><td><code>user</code></td><td>Messages from the user — and the <code>tool_result</code> blocks you send back after running a tool</td></tr>
+                <tr><td><code>assistant</code></td><td>The model's own responses, including <code>tool_use</code> requests — included when you resend history</td></tr>
+                <tr><td>tool result</td><td>Not its own role: a tool's output appears as a <code>tool_result</code> <em>content block</em> inside a <code>user</code>-role message</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>So a single tool round-trip is represented in the transcript you resend as an assistant <code>tool_use</code> followed by a user <code>tool_result</code>:</p>
+          <div class="code">
+            <div class="code-head"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span><span class="code-file">tool_roundtrip.json</span><span class="code-lang">json</span></div>
+            <pre data-lang="json"><code>"messages": [
+  {"role": "user", "content": "Where is order 12345?"},
+  {"role": "assistant", "content": [
+    {"type": "tool_use", "id": "tu_1", "name": "lookup_order", "input": {"order_id": 12345}}
+  ]},
+  {"role": "user", "content": [
+    {"type": "tool_result", "tool_use_id": "tu_1", "content": "status: shipped, eta: 2025-02-01"}
+  ]}
+]</code></pre>
+          </div>
+          <div class="callout exam">
+            <div class="co-title">Critically important — the API is stateless</div>
+            <p>On every request you must send the <strong>full conversation history</strong>. The model does <em>not</em> persist state between requests — each call is completely independent. There is no <code>session_id</code> and no server-side memory; if a turn isn't in <code>messages</code>, the model has never seen it.</p>
+          </div>
+          <p>Because nothing persists, a "conversation" is really a growing transcript you carry forward — which is why long conversations cost more and run slower:</p>
           <div class="figure">
             <svg viewBox="0 0 760 230" role="img" aria-label="Stateless API: each call resends the whole history">
-              <!-- call 1 -->
               <rect class="dg-node" x="20" y="70" width="150" height="90" rx="10"/>
               <text class="dg-label" x="95" y="100" text-anchor="middle">Call 1</text>
               <text class="dg-sub" x="95" y="122" text-anchor="middle">[u]</text>
               <text class="dg-sub" x="95" y="140" text-anchor="middle">1 message</text>
-              <!-- call 2 -->
               <rect class="dg-node" x="220" y="55" width="160" height="120" rx="10"/>
               <text class="dg-label" x="300" y="85" text-anchor="middle">Call 2</text>
               <text class="dg-sub" x="300" y="107" text-anchor="middle">[u][a][u]</text>
               <text class="dg-sub" x="300" y="125" text-anchor="middle">3 messages</text>
-              <!-- call 3 -->
               <rect class="dg-node-clay" x="430" y="35" width="180" height="160" rx="10"/>
               <text class="dg-label" x="520" y="65" text-anchor="middle">Call 3</text>
               <text class="dg-sub" x="520" y="87" text-anchor="middle">[u][a][u][a][u]</text>
               <text class="dg-sub" x="520" y="105" text-anchor="middle">5 messages</text>
               <text class="dg-sub" x="520" y="135" text-anchor="middle" fill="#cb4b16">↑ tokens ↑ cost</text>
               <text class="dg-sub" x="520" y="153" text-anchor="middle" fill="#cb4b16">↑ latency</text>
-              <!-- arrows -->
               <line class="dg-edge-clay" x1="170" y1="115" x2="216" y2="115" marker-end="url(#ar1)"/>
               <line class="dg-edge-clay" x1="380" y1="115" x2="426" y2="115" marker-end="url(#ar1)"/>
               <text class="dg-sub" x="660" y="115" fill="#93a1a1">resend</text>
@@ -300,33 +326,68 @@
             <div class="figcap">Each request carries the <b>entire</b> history — so long conversations cost more and run slower (Ch 11).</div>
           </div>
 
-          <h2><span class="h2-num">1.3</span>Message roles &amp; <code>stop_reason</code></h2>
-          <p>The <code>messages</code> array uses three roles: <code>user</code>, <code>assistant</code> (the model's prior replies, included when you resend), and tool results (which appear as a <code>tool_result</code> content block, not an explicit role). Every response carries a <code>stop_reason</code> that drives your control flow:</p>
+          <h2><span class="h2-num">1.3</span>The <code>stop_reason</code> field</h2>
+          <p>Every response includes a <code>stop_reason</code> telling you <em>why</em> the model stopped generating. This is the value your code branches on:</p>
           <div class="tbl-wrap">
             <table>
-              <thead><tr><th>stop_reason</th><th>Meaning</th><th>What you do</th></tr></thead>
+              <thead><tr><th>Value</th><th>Meaning</th><th>What you do</th></tr></thead>
               <tbody>
-                <tr><td><code>end_turn</code></td><td>The model finished</td><td>Show the result — the loop ends</td></tr>
-                <tr><td><code>tool_use</code></td><td>The model wants a tool</td><td>Run it, append the result, call again</td></tr>
-                <tr><td><code>max_tokens</code></td><td>Hit the token cap</td><td>Response is truncated; raise the limit</td></tr>
-                <tr><td><code>stop_sequence</code></td><td>A stop string appeared</td><td>Handle per your app logic</td></tr>
+                <tr><td><code>"end_turn"</code></td><td>The model finished its response</td><td>Show the result to the user — the loop ends</td></tr>
+                <tr><td><code>"tool_use"</code></td><td>The model wants to call a tool</td><td>Execute the tool, append the result, call again</td></tr>
+                <tr><td><code>"max_tokens"</code></td><td>The token limit was reached</td><td>The response is truncated; raise <code>max_tokens</code></td></tr>
+                <tr><td><code>"stop_sequence"</code></td><td>A stop sequence was encountered</td><td>Handle based on your application logic</td></tr>
               </tbody>
             </table>
           </div>
+          <p>For agentic systems, <code>"tool_use"</code> and <code>"end_turn"</code> are the two that matter — they <em>are</em> the agent loop:</p>
+          <div class="code">
+            <div class="code-head"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span><span class="code-file">agent_loop.py</span><span class="code-lang">python</span></div>
+            <pre data-lang="python"><code>while True:
+    resp = client.messages.create(model=MODEL, messages=history, tools=tools)
+    history.append(resp)                 # append the assistant turn
+    if resp.stop_reason == "tool_use":
+        history.append(run_tools(resp))  # execute tools, append tool_result(s)
+        continue                         # loop again with the new context
+    if resp.stop_reason == "end_turn":
+        break                            # task complete -> show resp to the user</code></pre>
+          </div>
           <div class="callout exam">
             <div class="co-title">Exam anchor</div>
-            <p>For agent loops, only two values matter: <code>tool_use</code> (keep looping) and <code>end_turn</code> (stop). The reliable completion signal is <strong>always</strong> <code>stop_reason == "end_turn"</code> — never parsed text, never an iteration counter.</p>
+            <p>The reliable completion signal is <strong>always</strong> <code>stop_reason == "end_turn"</code> — never parsed text ("I'm done"), never an iteration counter, never "the model produced some text." Those are the classic anti-patterns (Ch 3).</p>
           </div>
 
           <h2><span class="h2-num">1.4</span>The system prompt</h2>
-          <p>The system prompt defines context and behavioural rules. It is loaded once, applies throughout, and takes priority over user messages. Use it for role, constraints, and output format.</p>
+          <p>The system prompt is a special instruction that defines context and behavioural rules. Four properties matter:</p>
+          <ul>
+            <li>It is <strong>not part of the <code>messages</code> array</strong> — it's passed separately in the <code>system</code> field.</li>
+            <li>It has <strong>priority over user messages</strong>.</li>
+            <li>It is <strong>loaded once and applies throughout</strong> the conversation.</li>
+            <li>It is used to define <strong>role, constraints, and output format</strong>.</li>
+          </ul>
           <div class="callout warn">
             <div class="co-title">Watch for unintended tool associations</div>
-            <p>System-prompt wording can accidentally steer tool selection. An instruction like <em>"always verify the customer"</em> can push the model to over-call <code>get_customer</code> even when it is unnecessary. (This is exactly the trap in practice Q56.)</p>
+            <p>System-prompt wording can accidentally create tool associations. An instruction like <em>"always verify the customer"</em> can push the model to over-call <code>get_customer</code> even when it is unnecessary — a keyword in the prompt steering tool selection. (This is exactly the trap in practice Q56, where the word "account" skews routing even though the tool descriptions are fine.)</p>
           </div>
 
           <h2><span class="h2-num">1.5</span>The context window</h2>
-          <p>The context window is the total text (in tokens) the model processes at once: system prompt + full history + tool definitions + tool results. Three failure modes recur on the exam:</p>
+          <p>The context window is the total amount of text (in tokens) the model can process at once. It is not just the chat — it includes <strong>four</strong> things:</p>
+          <div class="figure">
+            <svg viewBox="0 0 760 150" role="img" aria-label="What fills the context window">
+              <rect x="30" y="40" width="150" height="46" rx="6" class="dg-node-clay"/>
+              <text class="dg-sub" x="105" y="68" text-anchor="middle">system prompt</text>
+              <rect x="186" y="40" width="160" height="46" rx="6" class="dg-node-blue"/>
+              <text class="dg-sub" x="266" y="68" text-anchor="middle">tool definitions</text>
+              <rect x="352" y="40" width="200" height="46" rx="6" class="dg-node-green"/>
+              <text class="dg-sub" x="452" y="62" text-anchor="middle">message history</text>
+              <text class="dg-sub" x="452" y="78" text-anchor="middle" fill="#859900">grows ▸</text>
+              <rect x="558" y="40" width="172" height="46" rx="6" class="dg-node"/>
+              <text class="dg-sub" x="644" y="62" text-anchor="middle">tool results</text>
+              <text class="dg-sub" x="644" y="78" text-anchor="middle" fill="#6c71c4">grows ▸</text>
+              <text class="dg-sub" x="380" y="118" text-anchor="middle">one fixed-size budget shared by all four — the last two keep growing</text>
+            </svg>
+            <div class="figcap">Everything competes for the same token budget: <b>system prompt + tool definitions + message history + tool results</b>.</div>
+          </div>
+          <p>Three context-window problems recur on the exam — know the symptom <em>and</em> the fix for each:</p>
           <div class="figure">
             <svg viewBox="0 0 760 200" role="img" aria-label="Lost in the middle reliability curve">
               <line x1="60" y1="160" x2="720" y2="160" class="dg-edge"/>
@@ -339,12 +400,12 @@
               <circle cx="390" cy="128" r="5" fill="#dc322f"/><text class="dg-sub" x="390" y="148" text-anchor="middle" fill="#dc322f">middle: missed</text>
               <circle cx="720" cy="48" r="5" fill="#859900"/><text class="dg-sub" x="710" y="38" text-anchor="end" fill="#859900">end: reliable</text>
             </svg>
-            <div class="figcap"><b>Lost in the middle</b> — models attend best to the start and end of long inputs. Put key info at the edges (Ch 11).</div>
+            <div class="figcap"><b>Lost in the middle</b> — models attend best to the start and end of long inputs.</div>
           </div>
           <ol>
-            <li><strong>Lost-in-the-middle:</strong> details buried in the middle of a long input get missed. <em>Fix:</em> place key facts at the start or end.</li>
-            <li><strong>Tool-result accumulation:</strong> a tool returning 40+ fields when 5 matter wastes most of the window. <em>Fix:</em> trim outputs (Ch 11).</li>
-            <li><strong>Progressive summarisation:</strong> numbers, percentages, and dates degrade into vague words ("about", "roughly") when history is compressed. <em>Fix:</em> a persistent facts block (Ch 11).</li>
+            <li><strong>Lost-in-the-middle effect:</strong> models reliably process information at the <em>start</em> and <em>end</em> of a long input but can miss details buried in the middle. <em>Mitigation:</em> place key information near the beginning or end, with explicit section headings (Ch 11).</li>
+            <li><strong>Accumulation of tool results:</strong> every tool call adds its output to the context. If a tool returns 40+ fields but only 5 matter, most of the window is wasted on noise. <em>Mitigation:</em> trim tool outputs to the relevant fields, e.g. with a <code>PostToolUse</code> hook (Ch 11).</li>
+            <li><strong>Progressive summarisation:</strong> when history is compressed to save space, numeric values, percentages, and dates often get lost and become vague ("about", "roughly", "a few"). <em>Mitigation:</em> extract exact facts into a persistent facts block kept outside the summarised history (Ch 11).</li>
           </ol>
 
           <div class="takeaways">
@@ -408,13 +469,39 @@
 
           <p class="chapter-lede"><code>tool_use</code> lets Claude call external functions. The model emits a structured request; your code runs it and returns a <code>tool_result</code>. This is also the most reliable way to get structured JSON out of Claude.</p>
 
-          <h2><span class="h2-num">2.1</span>Defining a tool</h2>
-          <p>A tool is a name, a description, and a JSON-schema for its inputs:</p>
+          <h2><span class="h2-num">2.1</span>What is <code>tool_use</code></h2>
+          <p><code>tool_use</code> is the mechanism that lets Claude call external functions. The crucial point: <strong>the model does not run code itself.</strong> It generates a structured tool-call <em>request</em>; <em>your</em> code executes it and returns the result as a <code>tool_result</code>. The model then continues from there.</p>
+          <div class="figure">
+            <svg viewBox="0 0 760 150" role="img" aria-label="tool_use round trip">
+              <rect class="dg-node-clay" x="20" y="50" width="150" height="56" rx="10"/>
+              <text class="dg-label" x="95" y="74" text-anchor="middle">Claude</text>
+              <text class="dg-sub" x="95" y="92" text-anchor="middle">emits tool_use</text>
+              <rect class="dg-node-blue" x="305" y="50" width="150" height="56" rx="10"/>
+              <text class="dg-label" x="380" y="74" text-anchor="middle">Your code</text>
+              <text class="dg-sub" x="380" y="92" text-anchor="middle">runs the tool</text>
+              <rect class="dg-node" x="590" y="50" width="150" height="56" rx="10"/>
+              <text class="dg-label" x="665" y="74" text-anchor="middle">Claude</text>
+              <text class="dg-sub" x="665" y="92" text-anchor="middle">reads tool_result</text>
+              <line class="dg-edge-clay" x1="170" y1="78" x2="301" y2="78" marker-end="url(#ar2a)"/>
+              <text class="dg-sub" x="237" y="66" text-anchor="middle">request</text>
+              <line class="dg-edge-blue" x1="455" y1="78" x2="586" y2="78" marker-end="url(#ar2b)"/>
+              <text class="dg-sub" x="520" y="66" text-anchor="middle">result</text>
+              <defs>
+                <marker id="ar2a" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path class="dg-arrow-clay" d="M0,0 L9,4.5 L0,9 z"/></marker>
+                <marker id="ar2b" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path class="dg-arrow-blue" d="M0,0 L9,4.5 L0,9 z"/></marker>
+              </defs>
+            </svg>
+            <div class="figcap">Claude <b>requests</b> → your code <b>executes</b> → the <b>result</b> goes back. Claude never touches your systems directly.</div>
+          </div>
+          <p>Beyond actions, this same mechanism is the <strong>most reliable way to get structured JSON out of Claude</strong> — covered in 2.4.</p>
+
+          <h2><span class="h2-num">2.2</span>Tool definition — the description is everything</h2>
+          <p>Each tool is defined with a name, a <strong>description</strong>, and a JSON-schema (<code>input_schema</code>) for its inputs:</p>
           <div class="code">
             <div class="code-head"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span><span class="code-file">tool.get_customer.json</span><span class="code-lang">json</span></div>
             <pre data-lang="json"><code>{
   "name": "get_customer",
-  "description": "Finds a customer by email or ID. Returns the customer profile (name, email, order history, account status). Use BEFORE lookup_order to verify identity. Accepts an email (user@domain.com) or a numeric customer_id.",
+  "description": "Finds a customer by email or ID. Returns the customer profile, including name, email, order history, and account status. Use this tool BEFORE lookup_order to verify the customer's identity. Accepts an email (format: user@domain.com) or a numeric customer_id.",
   "input_schema": {
     "type": "object",
     "properties": {
@@ -425,26 +512,30 @@
   }
 }</code></pre>
           </div>
-
-          <h2><span class="h2-num">2.2</span>The description is the routing mechanism</h2>
-          <p>An LLM selects tools <strong>by their descriptions</strong>. This is the most-tested idea in Domain 2. Minimal descriptions like "Retrieves customer information" cause misrouting when tools overlap.</p>
+          <p>Four aspects of a tool description are critically important — and heavily tested in Domain 2:</p>
+          <ol>
+            <li><strong>The description is the primary selection mechanism.</strong> An LLM chooses which tool to call based on its description. Minimal descriptions ("Retrieves customer information") lead to mistakes the moment two tools overlap.</li>
+            <li><strong>A good description includes</strong> what the tool does and returns · input formats and example values · edge cases and constraints · when to use it versus similar alternatives.</li>
+            <li><strong>Avoid identical or overlapping descriptions.</strong> If <code>analyze_content</code> and <code>analyze_document</code> have nearly identical descriptions, the model <em>will</em> confuse them.</li>
+            <li><strong>Built-in vs. MCP tools.</strong> Agents may prefer built-in tools (Read, Grep) over MCP tools with similar functionality — so strengthen MCP descriptions to highlight unique data or context the built-ins can't provide.</li>
+          </ol>
+          <p>The fix for overlap is to <strong>rename and differentiate</strong>, not to add a classifier on top:</p>
           <div class="compare">
             <div class="card bad">
-              <h4>✗ Weak</h4>
+              <h4>✗ Weak — overlapping</h4>
               <p><code>analyze_content</code> — "analyzes content and extracts key information"</p>
               <p><code>analyze_document</code> — "analyzes documents and extracts key information"</p>
               <p>Near-identical → the model confuses them and misroutes ~45% of requests.</p>
             </div>
             <div class="card good">
-              <h4>✓ Strong</h4>
-              <p>Rename + differentiate: <code>extract_web_results</code> — "processes and returns information retrieved from web search and URLs."</p>
-              <p>Now each tool's purpose is unambiguous.</p>
+              <h4>✓ Strong — distinct</h4>
+              <p>Rename + rewrite: <code>extract_web_results</code> — "processes and returns information retrieved from web search and URLs."</p>
+              <p>Now each tool's purpose is unambiguous (this is the fix in practice Q7).</p>
             </div>
           </div>
-          <p>A good description states: <strong>what it does and returns · input formats with examples · edge cases and limits · when to use it vs. a similar tool.</strong></p>
-          <div class="callout note">
-            <div class="co-title">Built-in vs. MCP tools</div>
-            <p>Agents may prefer built-in tools (Read, Grep) over MCP tools with similar functions. To win them over, strengthen the MCP description — highlight unique data or context the built-ins can't provide.</p>
+          <div class="callout exam">
+            <div class="co-title">Exam anchor — first move on misrouting</div>
+            <p>When an agent keeps picking the wrong tool and the descriptions are minimal, the highest-impact first step is to <strong>expand the descriptions</strong> (input formats, examples, edge cases, boundaries) — not few-shot examples, not a routing layer, not merging the tools.</p>
           </div>
 
           <h2><span class="h2-num">2.3</span>The <code>tool_choice</code> parameter</h2>
@@ -476,13 +567,24 @@
               <tbody>
                 <tr><td><code>{"type":"auto"}</code></td><td>Model decides: tool or text</td><td>Default for most cases</td></tr>
                 <tr><td><code>{"type":"any"}</code></td><td>Must call <em>some</em> tool</td><td>Guarantee structured output</td></tr>
-                <tr><td><code>{"type":"tool","name":"x"}</code></td><td>Must call tool <em>x</em></td><td>Force a specific first step / ordering</td></tr>
+                <tr><td><code>{"type":"tool","name":"extract_metadata"}</code></td><td>Must call that exact tool</td><td>Force a specific first step / ordering</td></tr>
               </tbody>
             </table>
           </div>
+          <p>Two scenarios the exam tests directly:</p>
+          <ul>
+            <li><strong><code>"any"</code> + multiple extraction tools</strong> → the model still picks the best-fitting one, but you're guaranteed structured output rather than a text reply.</li>
+            <li><strong>Forced selection</strong> → when you must guarantee a specific first action — e.g. forcing <code>extract_metadata</code> to run <em>before</em> any enrichment tools.</li>
+          </ul>
+          <p>Rule of thumb: pick the <em>loosest</em> setting that still gives the guarantee you need. <code>auto</code> unless you specifically need to force a tool call or an order.</p>
 
           <h2><span class="h2-num">2.4</span>JSON schemas for structured output</h2>
-          <p>Using <code>tool_use</code> with a JSON schema is the <strong>most reliable</strong> way to get structured output. It guarantees valid JSON and the required structure — but <em>not</em> semantic correctness (values can still be wrong).</p>
+          <p>Using <code>tool_use</code> with a JSON schema is the <strong>most reliable</strong> way to obtain structured output from Claude. Concretely, it:</p>
+          <ul>
+            <li><strong>Guarantees syntactically valid JSON</strong> — no missing braces, no trailing commas.</li>
+            <li><strong>Enforces the required structure</strong> — required fields are present, types match the schema.</li>
+            <li><strong>Does not guarantee semantic correctness</strong> — the values themselves can still be wrong (see 2.5).</li>
+          </ul>
           <div class="code">
             <div class="code-head"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span><span class="code-file">extraction_schema.json</span><span class="code-lang">json</span></div>
             <pre data-lang="json"><code>{
@@ -506,14 +608,19 @@
           </ul>
 
           <h2><span class="h2-num">2.5</span>Syntax vs. semantic errors</h2>
+          <p>Two different kinds of error can come out of a structured-output call, and they need different fixes:</p>
           <div class="tbl-wrap">
             <table>
-              <thead><tr><th>Type</th><th>Example</th><th>Mitigation</th></tr></thead>
+              <thead><tr><th>Error type</th><th>Example</th><th>Mitigation</th></tr></thead>
               <tbody>
-                <tr><td><span class="pill bad">Syntax</span></td><td>Invalid JSON, wrong field type</td><td><code>tool_use</code> + JSON schema <em>eliminates</em> these</td></tr>
-                <tr><td><span class="pill warn">Semantic</span></td><td>Totals don't add up, value in wrong field, hallucination</td><td>Validation checks, retry-with-feedback, self-correction (Ch 6)</td></tr>
+                <tr><td><span class="pill bad">Syntax</span></td><td>Invalid JSON, wrong field type</td><td><code>tool_use</code> with a JSON schema <em>eliminates</em> these</td></tr>
+                <tr><td><span class="pill warn">Semantic</span></td><td>Totals don't add up, value in the wrong field, hallucination</td><td>Validation checks, retry-with-feedback, self-correction (Ch 6)</td></tr>
               </tbody>
             </table>
+          </div>
+          <div class="callout note">
+            <div class="co-title">The schema only solves half the problem</div>
+            <p>A strict JSON schema <em>eliminates</em> syntax errors entirely — but it can't tell that <code>total</code> doesn't equal the sum of the line items, or that a value landed in the wrong field. Those <strong>semantic</strong> errors need validation checks, retry-with-feedback, and self-correction — the subject of Chapter 6.</p>
           </div>
 
           <div class="takeaways">
